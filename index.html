@@ -352,8 +352,49 @@ svg.wheel-mini{margin:1.8rem auto 0; max-width:330px; display:block}
   fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
 
 /* ---------- SKILLS ---------- */
-.skills{display:grid; gap:1.1rem; margin:2rem 0 0;
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))}
+/* Breite Karte fuer die Themen ausserhalb der Arbeit. Sie stehen vor dem
+   Werkzeugkasten, weil sie mehr ueber die Person sagen als eine Softwareliste. */
+.feature{
+  display:grid; grid-template-columns:1fr; margin:1.8rem 0 0;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow)
+}
+.feature.lead{border-top:3px solid var(--butter)}
+.feature-art{position:relative; height:220px; overflow:hidden}
+.feature-art img{width:100%; height:100%; object-fit:cover; display:block}
+.feature-body{padding:1.5rem 1.6rem 1.7rem}
+@media (min-width:760px){
+  .feature{grid-template-columns:minmax(240px,36%) 1fr}
+  .feature-art{height:auto; min-height:100%}
+  /* Beim Spiegeln muss auch das Raster mitdrehen, sonst landet das Bild in der
+     breiten Spalte und der Text wird in die schmale gequetscht. */
+  .feature.flip{grid-template-columns:1fr minmax(240px,36%)}
+  .feature.flip .feature-art{order:2}
+}
+.kicker{
+  font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--accent); font-weight:800; margin:0 0 .4rem
+}
+.feature-body h3{font-size:1.18rem; color:var(--primary)}
+.feature-body>p{margin:.6rem 0 0; color:var(--ink-2); font-size:.97rem}
+.facts{list-style:none; margin:1rem 0 0; padding:0; display:grid; gap:.5rem}
+.facts li{display:grid; grid-template-columns:auto 1fr; gap:.6rem; font-size:.93rem; color:var(--ink-2)}
+.facts svg{width:1.05rem; height:1.05rem; color:var(--butter); flex:none; margin-top:.18rem;
+  fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.facts b{color:var(--ink); font-weight:650}
+
+.awards{display:grid; gap:1.1rem; margin:1.4rem 0 0; grid-template-columns:1fr}
+@media (min-width:680px){ .awards{grid-template-columns:1fr 1fr} }
+.award{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.1rem 1.25rem; box-shadow:var(--shadow)}
+
+.tools-head{
+  margin:2.4rem 0 0; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:800; display:flex; align-items:center; gap:.6rem
+}
+.tools-head::after{content:""; height:1px; background:var(--rule-2); flex:1}
+.skills{display:grid; gap:1.1rem 1.6rem; margin:1.1rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
 .skill h3{font-size:.96rem; color:var(--primary)}
 .skill p{margin:.35rem 0 0; color:var(--ink-2); font-size:.93rem}
 
@@ -1005,18 +1046,69 @@ footer a{color:#CFE2F2}
       <div class="cap">
         <p class="eyebrow">Toolkit</p>
         <h2>How I work</h2>
-        <p class="lede">The tools behind the numbers, and what I do when the screen is off.</p>
+        <p class="lede">What I do when the screen is off, and the tools I reach for when it is on.</p>
       </div>
     </div>
+    <article class="feature lead">
+      <div class="feature-art ph-scrim">
+        <img class="ph" src="assets/img/resp.jpg" alt="Dairy cows close up in evening light"
+             width="760" height="760" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <p class="kicker">Responsibility</p>
+        <h3>A dairy farm does not pause for an emergency</h3>
+        <p>When illness or an accident stops a family, the cows still have to be milked that
+           evening. I have taken a farm over at short notice more than five times, and I still
+           do. It is the part of this industry that made me want to work for the people who
+           own it.</p>
+        <ul class="facts">
+          <li><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21v-6h6v6"/></svg>
+            <span><b>Five farms and more</b> run at short notice when illness or an emergency
+            stopped a family</span></li>
+          <li><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="10" r="2.8"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15.5 20c0-2.5 1.5-4.5 4-4.5"/></svg>
+            <span><b>Board member</b> of a rural youth association with 80 members</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 3l9 5v8l-9 5-9-5V8z"/><path d="M12 12v9M3 8l9 4 9-4"/></svg>
+            <span><b>Involved in the family business</b>, from the daily work to the decisions
+            behind it</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6z"/></svg>
+            <span><b>Military service</b> with the Austrian Armed Forces</span></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="feature flip">
+      <div class="feature-art ph-scrim">
+        <img class="ph" src="assets/img/beyond.jpg" alt="Cheese and grapes on a wooden board"
+             width="900" height="500" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <p class="kicker">Beyond work</p>
+        <h3>Away from the desk</h3>
+        <p>Bouldering, cycling and mountaineering. Cooking, and a declared cheese lover — which
+           is not unrelated to the industry I chose. And building small applications for
+           problems I run into day to day, which is where my interest in the data side of
+           finance started.</p>
+      </div>
+    </article>
+
+    <div class="awards">
+      <div class="award">
+        <h3>Scholarship</h3>
+        <p class="meta">Deutschlandstipendium 2024/25 and 2025/26, a merit award granted to the
+           top of the year</p>
+      </div>
+      <div class="award">
+        <h3>Certifications</h3>
+        <p class="meta">Bloomberg Market Concepts, 2023 · Quality Officer ISO 9001, 2021</p>
+      </div>
+    </div>
+
+    <p class="tools-head">Tools</p>
     <div class="skills">
       <div class="skill"><h3>Analysis</h3><p>Excel and VBA · Power BI and Power Query · SQL · Python</p></div>
       <div class="skill"><h3>Business systems</h3><p>SAP BTP, Fiori and Analysis for Office · SAP Crystal Reports</p></div>
       <div class="skill"><h3>Building</h3><p>C# and .NET · React · AI-assisted development</p></div>
       <div class="skill"><h3>Languages</h3><p>German native · English fluent · Spanish basic · Danish, currently learning</p></div>
-      <div class="skill"><h3>Certifications</h3><p>Bloomberg Market Concepts, 2023 · Quality Officer ISO 9001, 2021</p></div>
-      <div class="skill"><h3>Scholarship</h3><p>Deutschlandstipendium 2024/25 and 2025/26, a merit award granted to the top of the year</p></div>
-      <div class="skill"><h3>Beyond work</h3><p>Bouldering, cycling and mountaineering · cooking, and a declared cheese lover · building small applications for problems I run into day to day</p></div>
-      <div class="skill"><h3>Responsibility</h3><p>Standing in for farming families in crisis · former board member of a rural youth association · involved in the family business · military service</p></div>
     </div>
   </div>
 </section>
