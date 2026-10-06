@@ -1,0 +1,54 @@
+# Dieses Verzeichnis bleibt bewusst crawlbar.
+#
+# Klingt widerspruechlich, ist aber der einzige Weg, der funktioniert:
+# Das "noindex" steht im <head> von index.html. Eine Suchmaschine kann es
+# nur befolgen, wenn sie die Seite abrufen darf. Ein "Disallow: /" wuerde
+# den Abruf verhindern, das noindex damit unsichtbar machen, und die nackte
+# Adresse koennte trotzdem im Index landen, sobald irgendwo ein Link darauf
+# zeigt. Crawlen erlauben, Indexieren verbieten ist die richtige Reihenfolge.
+User-agent: *
+Allow: /
+
+# Sammler, die nicht suchen, sondern Inhalte abgreifen. Sie brauchen die
+# Seite nicht zu lesen, also hier vollstaendig ausgesperrt.
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: OAI-SearchBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: Claude-Web
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Omgilibot
+Disallow: /
+
+User-agent: Diffbot
+Disallow: /
