@@ -5,437 +5,717 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Raphael Gaisberger — Dairy finance</title>
 <meta name="description" content="Raphael Gaisberger — finance, controlling and data in the dairy value chain. Application for the Arla Futures Finance Graduate Programme 2027.">
-<!-- Die Seite soll erreichbar, aber nicht auffindbar sein: Wer den Link
-     bekommt, sieht sie; eine Namenssuche findet sie nicht. Dafuer ist das
-     meta-robots-Tag das wirksame Mittel, nicht die robots.txt. -->
+<!-- Erreichbar, aber nicht auffindbar: Wer den Link bekommt, sieht die Seite;
+     eine Namenssuche findet sie nicht. Das meta-robots-Tag ist das wirksame
+     Mittel dafuer, nicht die robots.txt. -->
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
 <meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<link rel="stylesheet" href="assets/vendor/jsvectormap.min.css">
 <style>
 /* ============================================================
-   Tokens. Light is defined on bare :root; dark redefines only
-   what changes, so no colour has its only definition in a media
-   query. One hue family plus neutrals: a second hue tested too
-   close to the accent to be reliably distinguishable.
+   TOKENS
+   Eine Blaufamilie plus warme Molkereitoene. Ein zweiter Buntton
+   (Weidegruen) wurde geprueft und verworfen: nur Delta-E 14 zum
+   Akzentblau, also fuer farbfehlsichtige Leser nicht sicher
+   unterscheidbar. Unterschiede laufen daher ueber Helligkeit,
+   Strichelung und Form, nicht ueber einen zweiten Farbton.
    ============================================================ */
 :root{
-  --milk:#FBF9F4;        /* page ground, warm off-white */
+  --milk:#FBF8F2;
+  --cream:#F3EDE1;
   --surface:#FFFFFF;
-  --surface-2:#EDF1F5;   /* the sidebar band from the CV */
-  --primary:#1A3C5E;
+  --surface-2:#EAF0F6;
+  --primary:#15354F;
   --accent:#2E6DA4;
-  --accent-soft:#9DBBD6;
-  --ink:#2D2D2D;
-  --ink-2:#555555;
-  --ink-3:#7A8089;
-  --rule:#D7DEE6;
-  --radius:10px;
-  --maxw:1080px;
+  --accent-2:#5E95C4;
+  --accent-soft:#A8C4DD;
+  --butter:#D9A441;
+  --ink:#232A31;
+  --ink-2:#4E5862;
+  --ink-3:#7A848E;
+  --rule:#DCD6C9;
+  --rule-2:#C9D6E3;
+  --shadow:0 1px 2px rgba(21,53,79,.05), 0 8px 24px rgba(21,53,79,.06);
+  --radius:14px;
+  --maxw:1120px;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 @media (prefers-color-scheme:dark){
   :root:not([data-theme="light"]){
-    --milk:#13181D;
-    --surface:#1A2027;
-    --surface-2:#222A33;
-    --primary:#9EC2E4;
-    --accent:#7FB0DC;
-    --accent-soft:#3C5B78;
-    --ink:#E8EAED;
-    --ink-2:#B7BEC7;
-    --ink-3:#8D96A1;
-    --rule:#2E3842;
+    --milk:#11161B; --cream:#171E25; --surface:#19212A; --surface-2:#202A35;
+    --primary:#A9CBEA; --accent:#7FB0DC; --accent-2:#5E95C4; --accent-soft:#3E5E7C;
+    --butter:#E0B45F;
+    --ink:#E9ECEF; --ink-2:#B4BDC6; --ink-3:#8A939C;
+    --rule:#2B343D; --rule-2:#31414F;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
   }
 }
 :root[data-theme="dark"]{
-  --milk:#13181D; --surface:#1A2027; --surface-2:#222A33;
-  --primary:#9EC2E4; --accent:#7FB0DC; --accent-soft:#3C5B78;
-  --ink:#E8EAED; --ink-2:#B7BEC7; --ink-3:#8D96A1; --rule:#2E3842;
+  --milk:#11161B; --cream:#171E25; --surface:#19212A; --surface-2:#202A35;
+  --primary:#A9CBEA; --accent:#7FB0DC; --accent-2:#5E95C4; --accent-soft:#3E5E7C;
+  --butter:#E0B45F; --ink:#E9ECEF; --ink-2:#B4BDC6; --ink-3:#8A939C;
+  --rule:#2B343D; --rule-2:#31414F;
 }
 
 *{box-sizing:border-box}
-/* Grid- und Flex-Kinder duerfen per Default nicht unter ihre Inhaltsbreite
-   schrumpfen (min-width:auto). Ohne das hier laeuft die Seite auf schmalen
-   Geraeten horizontal ueber. */
-.hero-grid>*,.chain-step>*,.tl li>*,.map-wrap>*,.countries li>*,
-.card-head>*,.rot li>*,.stat,.skill,.card,.why-block{min-width:0}
-.countries .det{overflow-wrap:anywhere}
-.eyebrow{overflow-wrap:anywhere}
+/* Grid- und Flexkinder duerfen sonst nicht unter ihre Inhaltsbreite
+   schrumpfen und erzeugen horizontalen Ueberlauf. */
+.hero-grid>*,.chain-step>*,.tl-item>*,.map-grid>*,.card-head>*,
+.rot li>*,.stat,.skill,.card,.why-block,.stage-card{min-width:0}
+
 body{
   margin:0; background:var(--milk); color:var(--ink);
-  font-family:var(--sans); font-size:16px; line-height:1.55;
+  font-family:var(--sans); font-size:16.5px; line-height:1.6;
   -webkit-font-smoothing:antialiased;
 }
 img{max-width:100%}
-a{color:var(--accent)}
-a:focus-visible,button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+a{color:var(--accent); text-underline-offset:2px}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
-.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:20px}
-section{padding-block:clamp(2.4rem,6vw,4rem)}
-section + section{border-top:1px solid var(--rule)}
+.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:22px}
+section{padding-block:clamp(2.8rem,6.5vw,4.6rem)}
+.band{background:var(--cream)}
+.band-blue{background:var(--surface-2)}
 
-h1,h2,h3{line-height:1.2; margin:0; color:var(--primary); font-weight:700}
-h2{font-size:clamp(1.35rem,3.4vw,1.8rem); letter-spacing:-.01em}
-h3{font-size:1.02rem; color:var(--ink)}
-.lede{color:var(--ink-2); max-width:62ch; margin:.6rem 0 0}
+h1,h2,h3{line-height:1.18; margin:0; color:var(--primary); font-weight:700}
+h2{font-size:clamp(1.45rem,3.6vw,2.05rem); letter-spacing:-.015em}
+h3{font-size:1.05rem; color:var(--ink)}
+.lede{color:var(--ink-2); max-width:64ch; margin:.65rem 0 0}
 .eyebrow{
-  font-size:.74rem; letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink-3); font-weight:700; margin:0 0 .5rem
+  display:flex; align-items:center; gap:.6rem;
+  font-size:.74rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:700; margin:0 0 .55rem
+}
+.eyebrow::before{content:""; width:1.6rem; height:2px; background:var(--butter); flex:none}
+
+/* ---------- Flaggen ---------- */
+.flag{
+  width:1.35em; height:1.01em; border-radius:2px; vertical-align:-.12em;
+  object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.12); flex:none
 }
 
-/* ---------- Hero: deliberately quiet. The first screen decides. ---------- */
-.hero{padding-block:clamp(2.6rem,7vw,4.4rem); border-top:0}
-.hero-grid{display:grid; gap:clamp(1.5rem,4vw,2.5rem); grid-template-columns:1fr}
-@media (min-width:760px){ .hero-grid{grid-template-columns:1fr auto; align-items:center} }
-.hero h1{font-size:clamp(2.1rem,6.5vw,3.3rem); letter-spacing:-.02em}
-.tagline{color:var(--accent); font-size:clamp(1rem,2.6vw,1.2rem); margin:.35rem 0 0; font-weight:600}
-.hero p.intro{margin:1.1rem 0 0; max-width:54ch; color:var(--ink-2); font-size:1.03rem}
+/* ---------- HERO ---------- */
+.hero{padding-block:clamp(2.6rem,7vw,4.6rem); position:relative; overflow:hidden}
+.hero::after{ /* warme Lichtflaeche statt steriler Flaeche */
+  content:""; position:absolute; inset:auto -10% -55% 40%; height:70%;
+  background:radial-gradient(closest-side, rgba(217,164,65,.16), transparent 70%);
+  pointer-events:none
+}
+.hero-grid{display:grid; gap:clamp(1.6rem,4vw,3rem); grid-template-columns:1fr; position:relative}
+@media (min-width:820px){ .hero-grid{grid-template-columns:1fr auto; align-items:start} }
+.hero h1{font-size:clamp(2.3rem,6.6vw,3.6rem); letter-spacing:-.025em}
+.tagline{
+  color:var(--accent); font-size:clamp(1.05rem,2.7vw,1.3rem);
+  margin:.4rem 0 0; font-weight:650
+}
+.profile-text{margin:1.4rem 0 0; max-width:58ch; font-size:1.06rem; color:var(--ink-2)}
+.profile-text strong{color:var(--ink); font-weight:650}
+.portrait-frame{position:relative; justify-self:start}
 .portrait{
-  width:clamp(150px,34vw,190px); height:clamp(150px,34vw,190px);
-  border-radius:50%; object-fit:cover; object-position:center 20%;
-  border:3px solid var(--accent-soft); justify-self:start; flex:none
+  width:clamp(210px,46vw,290px); height:clamp(210px,46vw,290px);
+  border-radius:50%; object-fit:cover; object-position:center 18%;
+  box-shadow:0 0 0 6px var(--milk), 0 0 0 8px var(--accent-soft), var(--shadow);
+  display:block
 }
-.chips{display:flex; flex-wrap:wrap; gap:.5rem; margin:1.3rem 0 0; padding:0; list-style:none}
+.chips{display:flex; flex-wrap:wrap; gap:.55rem; margin:1.5rem 0 0; padding:0; list-style:none}
 .chip{
-  background:var(--surface-2); color:var(--ink-2); border:1px solid var(--rule);
-  border-radius:999px; padding:.3rem .8rem; font-size:.84rem; font-weight:600
+  background:var(--surface); color:var(--ink-2); border:1px solid var(--rule-2);
+  border-radius:999px; padding:.34rem .9rem; font-size:.85rem; font-weight:600;
+  display:inline-flex; align-items:center; gap:.45rem
 }
+.chip svg{width:1rem; height:1rem; color:var(--accent); flex:none}
 
-/* ---------- Value chain ---------- */
-.chain-svg{width:100%; height:auto; display:none; margin:1.8rem 0 0}
-@media (min-width:860px){ .chain-svg{display:block} }
-.chain-list{list-style:none; margin:1.6rem 0 0; padding:0; display:grid; gap:0}
-.chain-step{
-  display:grid; grid-template-columns:auto 1fr; gap:0 1rem;
-  padding-bottom:1.3rem; position:relative
+/* ---------- MILK WHEEL ---------- */
+.wheel-wrap{display:none; margin:2rem 0 0}
+@media (min-width:900px){ .wheel-wrap{display:block} .wheel-mini{display:none} }
+/* Auf schmalen Geraeten traegt eine kompakte Ringfassung ohne Aussenbeschriftung;
+   die Stationen stehen darunter in der Dairy Chain ohnehin ausgeschrieben. */
+.wheel-mini{margin:1.8rem auto 0; max-width:330px; display:block}
+.mini-legend{
+  list-style:none; margin:1.1rem 0 0; padding:0; display:grid; gap:.4rem;
+  grid-template-columns:1fr 1fr; font-size:.84rem; color:var(--ink-2)
 }
-.chain-step:last-child{padding-bottom:0}
-.dot{
-  width:15px; height:15px; border-radius:50%; background:var(--accent);
-  margin-top:.42rem; grid-row:1/3; position:relative; z-index:1
-}
-.chain-step::before{
-  content:""; position:absolute; left:7px; top:1.2rem; bottom:-.15rem;
-  width:2px; background:var(--accent-soft)
-}
-.chain-step:last-child::before{display:none}
-.chain-step.future .dot{background:var(--milk); border:2px solid var(--accent); width:15px; height:15px}
-.chain-step.future::before{background:none; border-left:2px dashed var(--accent-soft); width:0}
-.chain-step h3{margin:0}
-.chain-step p{margin:.2rem 0 0; color:var(--ink-2); font-size:.95rem}
-.stage{
-  font-size:.72rem; letter-spacing:.1em; text-transform:uppercase;
-  color:var(--ink-3); font-weight:700
-}
-.future-note{
-  margin:1.6rem 0 0; padding:.9rem 1.1rem; border-left:3px dashed var(--accent-soft);
-  background:var(--surface-2); border-radius:0 var(--radius) var(--radius) 0;
-  color:var(--ink-2); font-size:.93rem
-}
+.mini-legend li{display:flex; gap:.45rem; align-items:center}
+.mini-legend .k{width:.7rem;height:.7rem;border-radius:50%;background:var(--accent);flex:none}
+.mini-legend .k.next{background:var(--surface);border:2px solid var(--accent-soft)}
+.wheel{width:100%; height:auto; max-width:820px; margin-inline:auto; display:block}
+.wheel .ring-done{fill:none; stroke:var(--accent); stroke-width:10; opacity:.9}
+.wheel .ring-next{fill:none; stroke:var(--accent-soft); stroke-width:10; stroke-dasharray:3 13; stroke-linecap:round}
+.wheel .hub{fill:var(--surface)}
+.wheel .hub-ring{fill:none; stroke:var(--rule-2); stroke-width:1.5}
+.wheel .pod{fill:var(--surface); stroke:var(--accent); stroke-width:2.5}
+.wheel .pod-next{fill:var(--surface); stroke:var(--accent-soft); stroke-width:2.5; stroke-dasharray:4 4}
+.wheel .ico{fill:none; stroke:var(--accent); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.wheel .ico-next{stroke:var(--accent-2)}
+.wheel .lbl{fill:var(--primary); font-size:14px; font-weight:700}
+.wheel .sub{fill:var(--ink-3); font-size:12px}
+.wheel .hub-a{fill:var(--primary); font-size:15px; font-weight:700}
+.wheel .hub-b{fill:var(--ink-2); font-size:12.5px}
+.wheel .butter{fill:var(--butter)}
 
-/* SVG colours must come from CSS, not from presentation attributes:
-   fill="var(--x)" is not resolved by browsers. */
-.chain-svg .ring,.map-svg .route{stroke:var(--accent-soft); fill:none}
-.chain-svg .node,.map-svg .node{fill:var(--accent)}
-.chain-svg .node-future{fill:var(--milk); stroke:var(--accent)}
-.chain-svg .t-main{fill:var(--primary)}
-.chain-svg .t-sub,.map-svg .t-sub{fill:var(--ink-3)}
-.chain-svg .t-next{fill:var(--accent)}
-.map-svg .t-cy{fill:var(--ink-2)}
+/* ---------- DAIRY CHAIN ---------- */
+.stages{
+  display:grid; gap:1.2rem; margin:2rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))
+}
+.stage-card{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column
+}
+.stage-art{
+  height:140px; background:linear-gradient(170deg,var(--surface-2),var(--cream));
+  display:grid; place-items:center; border-bottom:1px solid var(--rule-2); position:relative
+}
+.stage-art svg{width:100%; height:100%; display:block}
+.stage-body{padding:1.05rem 1.15rem 1.25rem}
+.stage-no{
+  font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--butter); font-weight:800
+}
+.stage-card h3{margin:.25rem 0 0; font-size:1.02rem; color:var(--primary)}
+.stage-card p{margin:.45rem 0 0; color:var(--ink-2); font-size:.93rem}
+.stage-card .mine{
+  margin:.7rem 0 0; padding-top:.7rem; border-top:1px dashed var(--rule-2);
+  color:var(--ink); font-size:.9rem; display:flex; gap:.5rem; align-items:flex-start
+}
+.stage-card .mine svg{width:1.05rem;height:1.05rem;color:var(--accent);flex:none;margin-top:.15rem}
+.stage-card.next{border-style:dashed; background:linear-gradient(180deg,var(--surface),var(--cream))}
+.stage-card.next .stage-no{color:var(--accent)}
 
-/* ---------- Timeline ---------- */
-.tl{list-style:none; margin:1.6rem 0 0; padding:0}
-.tl li{
-  display:grid; grid-template-columns:5.6rem 1fr; gap:.1rem 1rem;
-  padding:.75rem 0; border-bottom:1px solid var(--rule)
+/* ---------- TIMELINE ---------- */
+.tl{position:relative; margin:2.2rem 0 0; padding:0; list-style:none}
+.tl::before{
+  content:""; position:absolute; left:11px; top:.4rem; bottom:.4rem; width:3px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-soft)); border-radius:2px
 }
-.tl li:last-child{border-bottom:0}
-.tl .yr{color:var(--accent); font-weight:700; font-variant-numeric:tabular-nums; font-size:.95rem}
-.tl .what{font-weight:600}
-.tl .where{color:var(--ink-2); font-size:.92rem; grid-column:2}
-@media (max-width:460px){
-  .tl li{grid-template-columns:1fr}
-  .tl .where{grid-column:1}
+@media (min-width:860px){ .tl::before{left:50%; transform:translateX(-50%)} }
+.tl-item{position:relative; padding:0 0 1.5rem 2.6rem}
+@media (min-width:860px){
+  .tl-item{width:50%; padding:0 0 2rem 0}
+  .tl-item:nth-child(odd){margin-left:0; padding-right:2.6rem; text-align:right}
+  .tl-item:nth-child(even){margin-left:50%; padding-left:2.6rem}
 }
+.tl-dot{
+  position:absolute; left:3px; top:.42rem; width:19px; height:19px; border-radius:50%;
+  background:var(--surface); border:3px solid var(--accent); z-index:1
+}
+.tl-item.milestone .tl-dot{background:var(--butter); border-color:var(--butter); box-shadow:0 0 0 5px rgba(217,164,65,.22)}
+@media (min-width:860px){
+  .tl-item:nth-child(odd) .tl-dot{left:auto; right:-9.5px}
+  .tl-item:nth-child(even) .tl-dot{left:-9.5px}
+}
+.tl-yr{color:var(--accent); font-weight:800; font-variant-numeric:tabular-nums; font-size:.86rem; letter-spacing:.02em}
+.tl-card{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:12px;
+  padding:.8rem 1rem; margin-top:.3rem; box-shadow:var(--shadow); display:inline-block;
+  max-width:100%; text-align:left
+}
+.tl-card h3{font-size:.98rem}
+.tl-card p{margin:.2rem 0 0; color:var(--ink-2); font-size:.9rem; display:flex; align-items:center; gap:.45rem; flex-wrap:wrap}
 
-/* ---------- Map ---------- */
-.map-wrap{margin:1.6rem 0 0; display:grid; gap:1.6rem; grid-template-columns:1fr}
-@media (min-width:820px){ .map-wrap{grid-template-columns:1.1fr .9fr; align-items:center} }
-.map-svg{width:100%; height:auto; background:var(--surface-2); border-radius:var(--radius)}
-.countries{list-style:none; margin:0; padding:0; display:grid; gap:.55rem}
-.countries li{display:grid; grid-template-columns:1.8rem 1fr auto; gap:.6rem; align-items:baseline}
-.countries .flag{font-size:1.15rem; line-height:1}
-.countries .cy{font-weight:600}
-.countries .det{color:var(--ink-2); font-size:.9rem; text-align:right}
+/* ---------- MAP ---------- */
+.map-grid{display:grid; gap:1.4rem; grid-template-columns:1fr; margin:2rem 0 0}
+@media (min-width:900px){ .map-grid{grid-template-columns:1.25fr .75fr} }
+#map{
+  height:clamp(330px,52vw,470px); background:var(--surface);
+  border:1px solid var(--rule-2); border-radius:var(--radius); box-shadow:var(--shadow)
+}
+.jvm-tooltip{font-family:var(--sans)!important; font-size:.85rem!important}
+.cty{list-style:none; margin:0; padding:0; display:grid; gap:.4rem; align-content:start}
+.cty button{
+  width:100%; display:grid; grid-template-columns:auto 1fr auto; gap:.7rem; align-items:center;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:10px;
+  padding:.6rem .8rem; font:inherit; color:inherit; text-align:left; cursor:pointer
+}
+.cty button:hover,.cty button[aria-current="true"]{border-color:var(--accent); background:var(--surface-2)}
+.cty .nm{font-weight:650; font-size:.94rem}
+.cty .dt{color:var(--ink-3); font-size:.84rem}
+#spotlight{
+  margin-top:.9rem; background:var(--surface-2); border:1px solid var(--rule-2);
+  border-radius:12px; padding:.9rem 1rem; color:var(--ink-2); font-size:.92rem; min-height:4.6rem
+}
+#spotlight strong{display:block; color:var(--primary); font-size:1rem; margin-bottom:.2rem}
 
-/* ---------- Stat tiles ---------- */
-.stats{
-  list-style:none; margin:1.6rem 0 0; padding:0; display:grid; gap:1rem;
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))
-}
-.stat{
-  background:var(--surface); border:1px solid var(--rule);
-  border-radius:var(--radius); padding:1.1rem 1.2rem
-}
-.stat b{display:block; font-size:1.55rem; color:var(--primary); line-height:1.1; letter-spacing:-.01em}
+/* ---------- STATS ---------- */
+.stats{list-style:none; margin:2rem 0 0; padding:0; display:grid; gap:1rem;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr))}
+.stat{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.15rem 1.25rem; box-shadow:var(--shadow); position:relative; overflow:hidden}
+.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--butter)}
+.stat b{display:block; font-size:1.6rem; color:var(--primary); line-height:1.1; letter-spacing:-.02em}
 .stat span{display:block; margin-top:.35rem; color:var(--ink-2); font-size:.9rem}
 
-/* ---------- Cards ---------- */
-.cards{display:grid; gap:1.1rem; margin:1.6rem 0 0}
-.card{
-  background:var(--surface); border:1px solid var(--rule);
-  border-radius:var(--radius); padding:1.2rem
-}
-.card-head{display:grid; grid-template-columns:auto 1fr; gap:.9rem; align-items:start}
+/* ---------- CARDS ---------- */
+.cards{display:grid; gap:1.15rem; margin:2rem 0 0}
+.card{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.3rem; box-shadow:var(--shadow)}
+.card-head{display:grid; grid-template-columns:auto 1fr; gap:.95rem; align-items:start}
 .mono{
-  width:46px; height:46px; border-radius:9px; display:grid; place-items:center;
-  background:var(--surface-2); border:1px solid var(--rule);
-  color:var(--primary); font-weight:800; font-size:.72rem; letter-spacing:.02em; text-align:center
+  width:52px; height:52px; border-radius:11px; display:grid; place-items:center;
+  background:var(--surface-2); border:1px solid var(--rule-2); color:var(--primary);
+  font-weight:800; font-size:.72rem; letter-spacing:.02em; text-align:center; line-height:1.1; flex:none
 }
-.card h3{margin:0}
-.meta{color:var(--ink-3); font-size:.87rem; margin:.15rem 0 0}
-.role{color:var(--accent); font-style:italic; font-size:.95rem; margin:.5rem 0 0}
-.card ul{margin:.6rem 0 0; padding-left:1.1rem; color:var(--ink-2)}
-.card li{margin:.3rem 0; font-size:.94rem}
-.card li::marker{color:var(--accent-soft)}
+.card h3{margin:0; display:flex; align-items:center; gap:.5rem; flex-wrap:wrap}
+.meta{color:var(--ink-3); font-size:.88rem; margin:.15rem 0 0}
+.role{color:var(--accent); font-style:italic; font-size:.96rem; margin:.65rem 0 0; font-weight:600}
+.card ul{margin:.5rem 0 0; padding-left:1.15rem; color:var(--ink-2)}
+.card li{margin:.32rem 0; font-size:.94rem}
+.card li::marker{color:var(--butter)}
 
-/* ---------- Why Arla ---------- */
-.why{display:grid; gap:1.4rem; margin:1.6rem 0 0}
-@media (min-width:820px){ .why{grid-template-columns:1fr 1fr} }
-.why-block{background:var(--surface); border:1px solid var(--rule); border-radius:var(--radius); padding:1.3rem}
-.why-block h3{color:var(--primary); font-size:1.02rem}
-.why-block p{margin:.55rem 0 0; color:var(--ink-2); font-size:.96rem}
-.rot{list-style:none; margin:.7rem 0 0; padding:0; display:grid; gap:.6rem}
+/* ---------- WHY ---------- */
+.why{display:grid; gap:1.3rem; margin:2rem 0 0}
+@media (min-width:840px){ .why{grid-template-columns:1fr 1fr} }
+.why-block{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.35rem; box-shadow:var(--shadow)}
+.why-block h3{color:var(--primary); font-size:1.04rem; display:flex; gap:.55rem; align-items:center}
+.why-block h3 svg{width:1.2rem;height:1.2rem;color:var(--butter);flex:none}
+.why-block p{margin:.6rem 0 0; color:var(--ink-2); font-size:.96rem}
+.rot{list-style:none; margin:.75rem 0 0; padding:0; display:grid; gap:.65rem}
 .rot li{display:grid; grid-template-columns:auto 1fr; gap:.7rem; font-size:.94rem; color:var(--ink-2)}
-.rot b{color:var(--ink); font-weight:600}
-.rot .n{
-  width:1.5rem; height:1.5rem; border-radius:50%; background:var(--surface-2);
-  border:1px solid var(--rule); color:var(--primary); display:grid; place-items:center;
-  font-size:.76rem; font-weight:700
-}
+.rot b{color:var(--ink); font-weight:650}
+.rot .n{width:1.6rem; height:1.6rem; border-radius:50%; background:var(--surface-2);
+  border:1px solid var(--rule-2); color:var(--primary); display:grid; place-items:center;
+  font-size:.78rem; font-weight:800}
 
-/* ---------- Skills ---------- */
-.skills{display:grid; gap:1.1rem; margin:1.6rem 0 0;
-  grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr))}
-.skill h3{font-size:.95rem; color:var(--primary)}
+/* ---------- SKILLS ---------- */
+.skills{display:grid; gap:1.1rem; margin:2rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,235px),1fr))}
+.skill h3{font-size:.96rem; color:var(--primary)}
 .skill p{margin:.35rem 0 0; color:var(--ink-2); font-size:.93rem}
 
-/* ---------- Footer ---------- */
-footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-block:2.6rem}
-.contact-links{display:flex; flex-wrap:wrap; gap:.7rem 1.4rem; margin:.9rem 0 0; padding:0; list-style:none; font-weight:600}
-.fine{color:var(--ink-3); font-size:.82rem; margin:1.6rem 0 0}
+/* ---------- FOOTER ---------- */
+footer{background:var(--primary); color:#E8EEF4; padding-block:3rem}
+footer h2,footer .eyebrow{color:#fff}
+footer .eyebrow{color:#B9CEE2}
+footer a{color:#CFE2F2}
+.contact-links{display:flex; flex-wrap:wrap; gap:.8rem 1.5rem; margin:1rem 0 0; padding:0; list-style:none; font-weight:650}
+.fine{color:#9FB7CD; font-size:.84rem; margin:1.8rem 0 0; max-width:70ch}
 
-/* ---------- Print: a recruiter may print this ---------- */
 @media print{
-  :root{--milk:#fff;--surface:#fff;--surface-2:#f4f4f4;--ink:#111;--ink-2:#333;--rule:#bbb}
-  body{font-size:11pt}
-  section{padding-block:1rem; break-inside:avoid}
-  .chain-svg,.map-svg{display:none}
-  .card,.stat,.why-block{break-inside:avoid}
+  :root{--milk:#fff;--cream:#fff;--surface:#fff;--surface-2:#f4f4f4;--ink:#111;--ink-2:#333;--rule-2:#bbb;--shadow:none}
+  body{font-size:11pt} section{padding-block:1rem; break-inside:avoid}
+  .wheel-wrap,#map{display:none}
+  .card,.stat,.why-block,.stage-card{break-inside:avoid}
+  footer{background:#fff;color:#111} footer h2{color:#111}
 }
+@media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} }
 </style>
 </head>
 <body>
 
-<!-- ================= HERO ================= -->
+<!-- ============ HERO: Profil zuerst ============ -->
 <header class="hero">
   <div class="wrap hero-grid">
     <div>
       <p class="eyebrow">Arla Futures Finance Graduate Programme 2027</p>
       <h1>Raphael Gaisberger</h1>
       <p class="tagline">Taking the lead in dairy finance</p>
-      <p class="intro">
-        I grew up on a dairy farm and now work in dairy finance. Knowing the value chain
-        from both ends is why a number on a page is never just a number to me: it ends up
-        as a milk price for the people who own the business.
+      <p class="profile-text">
+        <strong>Dairy finance is where I want to take the lead and create a sustainable
+        impact.</strong> At Arla I turned investment cases and cost analyses into decisions
+        senior leaders could act on. The culture and strategic direction I experienced
+        during that time fully convinced me. This led me to join the post-merger
+        integration and to write my thesis on net working capital optimisation for dairy
+        stocks. Growing up on a dairy farm, I know what it means when the result ends up
+        as the farmer owner's milk price. That is why I am eager to grow with Arla over
+        the long term and contribute to Feed Life.
       </p>
       <ul class="chips">
-        <li class="chip">Available from September 2027</li>
-        <li class="chip">Based in Denmark</li>
-        <li class="chip">Internationally mobile</li>
+        <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Available from September 2027</li>
+        <li class="chip"><img class="flag" src="assets/flags/dk.svg" alt="">Based in Denmark</li>
+        <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>Internationally mobile</li>
       </ul>
     </div>
-    <img class="portrait" src="photo_raphael.jpg"
-         alt="Portrait of Raphael Gaisberger" width="190" height="190">
+    <div class="portrait-frame">
+      <img class="portrait" src="assets/img/portrait.jpg" alt="Raphael Gaisberger"
+           width="290" height="290">
+    </div>
   </div>
 </header>
 
 <main>
 
-<!-- ================= VALUE CHAIN ================= -->
-<section id="chain">
+<!-- ============ MILK WHEEL ============ -->
+<section id="wheel" class="band">
   <div class="wrap">
     <p class="eyebrow">The through line</p>
-    <h2>In a cooperative the value chain is a circle</h2>
+    <h2>The milk wheel: in a cooperative the value chain turns full circle</h2>
     <p class="lede">
-      Milk leaves the farm, gains value at every stage, and the result returns to the same
-      farms as a milk price. I have stood on most of those stages. The dashed part is where
-      I want to work next.
+      Milk leaves the farm, gains value at every stage, and the result comes back to the
+      same farms as a milk price. I have stood on the solid part of the wheel. The dotted
+      part is the return leg, and it is where I want to work next.
     </p>
 
-    <svg class="chain-svg" viewBox="0 0 900 495" role="img"
-         aria-labelledby="chainTitle chainDesc">
-      <title id="chainTitle">The dairy value chain as a closed circle</title>
-      <desc id="chainDesc">Farm, collection, processing, products and ingredients, trade and
-        finance, and a dashed return leg carrying the result back to the farm as a milk price.</desc>
-      <g class="ring" stroke-width="2.5">
-        <path d="M450 80 A 170 170 0 0 1 450 420" />
-        <path d="M450 420 A 170 170 0 0 1 450 80" stroke-dasharray="7 7" opacity=".85"/>
+    <svg class="wheel wheel-mini" viewBox="0 0 320 320" role="img" aria-label="The milk wheel in compact form: five stages worked, three topics ahead, the result returning to the farm">
+      <path class="ring-done" d="M160 30 A130 130 0 0 1 160 290" stroke-width="8"/>
+      <path class="ring-next" d="M160 290 A130 130 0 0 1 160 30" stroke-width="8"/>
+      <circle class="hub" cx="160" cy="160" r="66"/><circle class="hub-ring" cx="160" cy="160" r="66"/>
+      <g transform="translate(160,138)">
+        <path class="ico" d="M-10 -12h20l-3 8v11a7 7 0 01-14 0v-11z"/>
+        <path class="butter" d="M-7 2h14v5a7 7 0 01-14 0z" stroke="none"/>
       </g>
-      <g font-family="inherit">
-        <!-- forward stages: labels sit outside the ring, anchored away from it -->
-        <g class="t-main" font-size="15" font-weight="700">
-          <text x="450" y="40" text-anchor="middle">Farm</text>
-          <text x="600" y="126" text-anchor="start">Collection</text>
-          <text x="648" y="246" text-anchor="start">Processing</text>
-          <text x="600" y="366" text-anchor="start">Products &amp; ingredients</text>
-          <text x="450" y="452" text-anchor="middle">Trade &amp; finance</text>
-        </g>
-        <g class="t-sub" font-size="12.5">
-          <text x="450" y="58" text-anchor="middle">grew up on one</text>
-          <text x="600" y="144" text-anchor="start">milk into the system</text>
-          <text x="648" y="264" text-anchor="start">cheese, from raw milk</text>
-          <text x="600" y="384" text-anchor="start">whey, brands, ingredients</text>
-          <text x="450" y="470" text-anchor="middle">where I work now</text>
-        </g>
-        <!-- return leg -->
-        <g class="t-next" font-size="13.5" font-weight="600" text-anchor="end">
-          <text x="300" y="374">Post-merger integration</text>
-          <text x="252" y="254">Data into decisions</text>
-          <text x="300" y="134">Net working capital</text>
-        </g>
-        <text class="t-main" x="450" y="244" font-size="14" font-weight="700"
-              text-anchor="middle">the result returns</text>
-        <text class="t-sub" x="450" y="264" font-size="12.5"
-              text-anchor="middle">as a milk price</text>
-      </g>
-      <g class="node">
-        <circle cx="450" cy="80" r="7"/><circle cx="570" cy="130" r="7"/>
-        <circle cx="620" cy="250" r="7"/><circle cx="570" cy="370" r="7"/>
-        <circle cx="450" cy="420" r="7"/>
-      </g>
-      <g class="node-future" stroke-width="2.5">
-        <circle cx="330" cy="370" r="6.5"/><circle cx="280" cy="250" r="6.5"/>
-        <circle cx="330" cy="130" r="6.5"/>
-      </g>
+      <text class="hub-a" x="160" y="176" text-anchor="middle" font-size="12.5">The result returns</text>
+      <text class="hub-b" x="160" y="192" text-anchor="middle" font-size="11">as a milk price</text>
+      <g transform="translate(160,30)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-9) scale(.72)"><path d="M2 16V8l12-7 12 7v8"/><path d="M2 16h24v9H2z"/></g></g>
+      <g transform="translate(252,98)"><circle class="pod" r="21"/><g class="ico" transform="translate(-11,-8) scale(.68)"><path d="M1 17V6h17v11"/><path d="M18 9h7l6 5v3h-13"/><circle cx="8" cy="19" r="3"/><circle cx="24" cy="19" r="3"/></g></g>
+      <g transform="translate(252,222)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-9) scale(.68)"><path d="M2 25V12l9-5v5l9-5v18z"/><path d="M24 25V2h5v23"/></g></g>
+      <g transform="translate(160,290)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-8) scale(.7)"><path d="M1 23h27"/><path d="M5 23V13M12 23V6M19 23V16M26 23V9"/></g></g>
+      <g transform="translate(68,222)"><circle class="pod-next" r="19"/><g class="ico ico-next" transform="translate(-9,-8) scale(.68)"><circle cx="7" cy="7" r="5"/><circle cx="19" cy="15" r="5"/><path d="M11 10l4 2"/></g></g>
+      <g transform="translate(58,160)"><circle class="pod-next" r="19"/><g class="ico ico-next" transform="translate(-9,-8) scale(.7)"><path d="M1 20h22"/><path d="M5 20v-7l5-5 5 6 7-9"/></g></g>
+      <g transform="translate(68,98)"><circle class="pod-next" r="19"/><g class="ico ico-next" transform="translate(-8,-8) scale(.7)"><circle cx="11" cy="11" r="10"/><path d="M11 5v12M8 8h6M8 14h6"/></g></g>
     </svg>
+    <ul class="mini-legend wheel-mini">
+      <li><span class="k"></span>Farm</li><li><span class="k"></span>Collection</li>
+      <li><span class="k"></span>Processing</li><li><span class="k"></span>Trade &amp; finance</li>
+      <li><span class="k next"></span>Net working capital</li><li><span class="k next"></span>Data into decisions</li>
+      <li><span class="k next"></span>Post-merger integration</li>
+    </ul>
 
-    <ol class="chain-list">
-      <li class="chain-step"><span class="dot" aria-hidden="true"></span>
-        <div><span class="stage">Farm</span>
-          <h3>Grew up on a dairy farm, and kept going back</h3>
-          <p>Austria from the start. Later a season on an Arla owner's farm in Denmark,
-             running milk production and herd management. I still stand in for farming
-             families when illness stops them.</p></div></li>
-      <li class="chain-step"><span class="dot" aria-hidden="true"></span>
-        <div><span class="stage">Processing</span>
-          <h3>Alpine cheese from raw milk</h3>
-          <p>Switzerland, from curd handling to ripening, and the full daily cycle of
-             on-farm processing.</p></div></li>
-      <li class="chain-step"><span class="dot" aria-hidden="true"></span>
-        <div><span class="stage">Across the chain</span>
-          <h3>Costing and profitability for dairy companies</h3>
-          <p>In consulting I own the platform market-leading dairy companies use to see
-             what a product actually costs, and the client relationships behind it.</p></div></li>
-      <li class="chain-step"><span class="dot" aria-hidden="true"></span>
-        <div><span class="stage">Trade &amp; finance</span>
-          <h3>Arla Global Trading and Planning Finance</h3>
-          <p>Investment business cases, a cost and benefit governance framework, and a
-             production cost variance analysis that corrected a six-figure reporting
-             deviation.</p></div></li>
-      <li class="chain-step future"><span class="dot" aria-hidden="true"></span>
-        <div><span class="stage">Next · the return leg</span>
-          <h3>Carrying the result back to the farm</h3>
-          <p>Post-merger integration with DMK Group. Shortening the path from data to
-             decision. Net working capital, the subject of my master's thesis. Carbon and
-             sustainability figures, which move into controlling as CSRD applies from 2027.</p></div></li>
-    </ol>
+    <div class="wheel-wrap">
+      <svg class="wheel" viewBox="0 0 860 560" role="img" aria-labelledby="wTitle wDesc">
+        <title id="wTitle">The milk wheel</title>
+        <desc id="wDesc">A circle of five value chain stages where Raphael has worked, and a
+          dotted return leg of three topics he wants to work on next, leading back to the farm.</desc>
 
-    <p class="future-note">
-      Everything above the dashed step has happened. The dashed step is what I want to
-      contribute, so that the farmer owners get a result they can plan and invest with.
-    </p>
-  </div>
-</section>
+        <path class="ring-done" d="M430 90 A190 190 0 0 1 430 470"/>
+        <path class="ring-next" d="M430 470 A190 190 0 0 1 430 90"/>
 
-<!-- ================= TIMELINE ================= -->
-<section id="timeline">
-  <div class="wrap">
-    <p class="eyebrow">Chronology</p>
-    <h2>Ten years, one direction</h2>
-    <ol class="tl">
-      <li><span class="yr">2016–21</span><span class="what">Matura, agriculture diploma</span>
-          <span class="where">🇦🇹 HBLA Ursprung, Salzburg · final grade 1.5</span></li>
-      <li><span class="yr">2018</span><span class="what">Dairy and cheese production</span>
-          <span class="where">🇨🇭 Moor-Dürrenwald, St. Stephan</span></li>
-      <li><span class="yr">2019</span><span class="what">Agriculture and dairy production</span>
-          <span class="where">🇩🇰 Agrovis ApS — an Arla member farm</span></li>
-      <li><span class="yr">2021/22</span><span class="what">Military service</span>
-          <span class="where">🇦🇹 Austrian Armed Forces</span></li>
-      <li><span class="yr">2022</span><span class="what">Work and travel</span>
-          <span class="where">🇪🇸 Spain · 🇵🇹 Portugal</span></li>
-      <li><span class="yr">2022–25</span><span class="what">B.Eng. Agribusiness</span>
-          <span class="where">🇩🇪 Weihenstephan-Triesdorf · final grade 1.5</span></li>
-      <li><span class="yr">2023/24</span><span class="what">Erasmus year</span>
-          <span class="where">🇮🇪 University College Dublin</span></li>
-      <li><span class="yr">since 2024</span><span class="what">Product Owner and consulting</span>
-          <span class="where">🇩🇪 Dairy and food consultancy, Eching</span></li>
-      <li><span class="yr">2025</span><span class="what">Intern, Global Trading and Planning Finance</span>
-          <span class="where">🇩🇰 Arla Foods, Aarhus</span></li>
-      <li><span class="yr">2025–27</span><span class="what">M.Sc. Management and Technology</span>
-          <span class="where">🇩🇪 TUM → 🇩🇰 DTU, joint degree · current average 1.3</span></li>
-      <li><span class="yr">since 2026</span><span class="what">Student Assistant, post-merger integration</span>
-          <span class="where">🇩🇰 Arla Foods, Aarhus</span></li>
-      <li><span class="yr">2027</span><span class="what">Available from September</span>
-          <span class="where">Finance Graduate Programme, Denmark or Germany</span></li>
-    </ol>
-  </div>
-</section>
+        <!-- Nabe -->
+        <circle class="hub" cx="430" cy="280" r="96"/>
+        <circle class="hub-ring" cx="430" cy="280" r="96"/>
+        <circle class="hub-ring" cx="430" cy="280" r="86"/>
+        <g transform="translate(430,246)">
+          <path class="ico" d="M-13 -16h26l-4 10v14a9 9 0 01-18 0v-14z"/>
+          <path class="butter" d="M-9 2h18v6a9 9 0 01-18 0z" stroke="none"/>
+        </g>
+        <text class="hub-a" x="430" y="292" text-anchor="middle">The result returns</text>
+        <text class="hub-b" x="430" y="311" text-anchor="middle">as a milk price for</text>
+        <text class="hub-b" x="430" y="327" text-anchor="middle">the farmer owners</text>
 
-<!-- ================= MAP ================= -->
-<section id="map">
-  <div class="wrap">
-    <p class="eyebrow">Where</p>
-    <h2>Seven countries, one industry</h2>
-    <p class="lede">Study, work and farm placements across Europe. The dashed line traces the
-       study and work path from Austria to Denmark.</p>
-    <div class="map-wrap">
-      <svg class="map-svg" viewBox="0 0 420 330" role="img" aria-labelledby="mapTitle mapDesc">
-        <title id="mapTitle">Schematic map of the stations across Europe</title>
-        <desc id="mapDesc">Nodes for Ireland, Denmark, Germany, Austria, Switzerland, Spain and
-          Portugal, connected in chronological order from Austria to Denmark.</desc>
-        <path class="route" d="M258 230 L300 118 L108 150 L300 118 L250 60"
-              stroke-width="2" stroke-dasharray="5 5"/>
-        <g font-family="inherit" font-size="12.5">
-          <g class="node">
-            <circle cx="150" cy="262" r="8"/><circle cx="258" cy="230" r="8"/>
-            <circle cx="300" cy="118" r="8"/><circle cx="108" cy="150" r="8"/>
-            <circle cx="250" cy="60" r="8"/><circle cx="62" cy="288" r="8"/>
+        <!-- Station 1: Farm (oben) -->
+        <g transform="translate(430,90)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-14,-13)">
+            <path d="M2 16V8l12-7 12 7v8"/><path d="M2 16h24v9H2z"/><path d="M11 25v-6h6v6"/>
           </g>
-          <g class="t-cy" text-anchor="middle">
-            <text x="150" y="288">🇨🇭 Switzerland</text>
-            <text x="258" y="256">🇦🇹 Austria</text>
-            <text x="300" y="144">🇩🇪 Germany</text>
-            <text x="108" y="176">🇮🇪 Ireland</text>
-            <text x="250" y="42">🇩🇰 Denmark</text>
-            <text x="62" y="314">🇪🇸 🇵🇹 Iberia</text>
+          <text class="lbl" x="0" y="-62" text-anchor="middle">Farm</text>
+          <text class="sub" x="0" y="-45" text-anchor="middle">grew up on one</text>
+        </g>
+        <!-- Station 2: Collection -->
+        <g transform="translate(610,170)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-16,-11)">
+            <path d="M1 17V6h17v11"/><path d="M18 9h7l6 5v3h-13"/>
+            <circle cx="8" cy="19" r="3"/><circle cx="24" cy="19" r="3"/>
           </g>
+          <text class="lbl" x="44" y="-4" text-anchor="start">Collection</text>
+          <text class="sub" x="44" y="13" text-anchor="start">milk into the system</text>
+        </g>
+        <!-- Station 3: Processing -->
+        <g transform="translate(620,390)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-15,-13)">
+            <path d="M2 25V12l9-5v5l9-5v18z"/><path d="M24 25V2h5v23"/><path d="M2 25h27"/>
+          </g>
+          <text class="lbl" x="44" y="-4" text-anchor="start">Processing</text>
+          <text class="sub" x="44" y="13" text-anchor="start">cheese from raw milk</text>
+        </g>
+        <!-- Station 4: Trade and finance (unten) -->
+        <g transform="translate(430,470)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-14,-12)">
+            <path d="M1 23h27"/><path d="M5 23V13M12 23V6M19 23V16M26 23V9"/>
+          </g>
+          <text class="lbl" x="0" y="52" text-anchor="middle">Trade &amp; finance</text>
+          <text class="sub" x="0" y="69" text-anchor="middle">where I work now</text>
+        </g>
+        <!-- Rueckweg -->
+        <g transform="translate(250,390)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-13,-11)">
+            <circle cx="7" cy="7" r="5"/><circle cx="19" cy="15" r="5"/><path d="M11 10l4 2"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Post-merger integration</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">bringing two finance teams together</text>
+        </g>
+        <g transform="translate(240,280)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-12,-12)">
+            <path d="M1 20h22"/><path d="M5 20v-7l5-5 5 6 7-9"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Data into decisions</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">figures ready before the decision</text>
+        </g>
+        <g transform="translate(250,170)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-12,-12)">
+            <circle cx="11" cy="11" r="10"/><path d="M11 5v12M8 8h6M8 14h6"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Net working capital</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">the subject of my thesis</text>
         </g>
       </svg>
-      <ul class="countries">
-        <li><span class="flag">🇩🇰</span><span class="cy">Denmark</span><span class="det">Master's, Arla, farm</span></li>
-        <li><span class="flag">🇩🇪</span><span class="cy">Germany</span><span class="det">Master's, Bachelor's, work</span></li>
-        <li><span class="flag">🇮🇪</span><span class="cy">Ireland</span><span class="det">Erasmus year</span></li>
-        <li><span class="flag">🇨🇭</span><span class="cy">Switzerland</span><span class="det">Dairy internship</span></li>
-        <li><span class="flag">🇦🇹</span><span class="cy">Austria</span><span class="det">Citizenship, A-levels</span></li>
-        <li><span class="flag">🇪🇸</span><span class="cy">Spain</span><span class="det">Work and travel</span></li>
-        <li><span class="flag">🇵🇹</span><span class="cy">Portugal</span><span class="det">Work and travel</span></li>
-      </ul>
     </div>
   </div>
 </section>
 
-<!-- ================= NUMBERS ================= -->
-<section id="numbers">
+<!-- ============ DAIRY CHAIN ============ -->
+<section id="chain">
+  <div class="wrap">
+    <p class="eyebrow">The dairy chain, stage by stage</p>
+    <h2>What I actually did at each stage</h2>
+    <p class="lede">
+      The same chain, unrolled. Each card shows the stage and, below the line, my own part
+      in it.
+    </p>
+
+    <div class="stages">
+
+      <article class="stage-card">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--surface-2)"/>
+            <path d="M0 104q40-14 80-4t80 2 80-10v48H0z" fill="var(--accent-soft)" opacity=".55"/>
+            <path d="M0 118q50-10 100-2t140-6v30H0z" fill="var(--accent)" opacity=".28"/>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linejoin="round">
+              <path d="M56 86V58l30-18 30 18v28"/><path d="M50 86h72v24H50z"/><path d="M78 110V94h16v16"/>
+            </g>
+            <g stroke="var(--primary)" stroke-width="2.2" stroke-linecap="round">
+              <path d="M152 102v10M164 103v9M178 103v9M188 101v11" fill="none"/>
+            </g>
+            <ellipse cx="170" cy="90" rx="23" ry="14" fill="var(--surface)" stroke="var(--primary)" stroke-width="2.2"/>
+            <path d="M158 80a9 9 0 018 6 22 14 0 01-10 1zM182 95a7 7 0 016 5 22 14 0 01-9-1z" fill="var(--primary)"/>
+            <path d="M193 80h8a7 7 0 017 7v4a6 6 0 01-6 6h-6z" fill="var(--surface)" stroke="var(--primary)" stroke-width="2.2"/>
+            <path d="M192 78l-4-5M203 77l3-6" stroke="var(--primary)" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+            <circle cx="203" cy="90" r="1.8" fill="var(--primary)"/>
+            <circle cx="206" cy="34" r="15" fill="var(--butter)" opacity=".85"/>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 01</p>
+          <h3>Farm</h3>
+          <p>Where the milk and the cost base both begin.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Grew up on one. Ran daily milk production and herd management on an Arla owner's
+            farm, and still stand in when illness stops a family.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--surface-2)"/>
+            <path d="M0 112h240v28H0z" fill="var(--accent)" opacity=".2"/>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linejoin="round">
+              <path d="M34 104V58h94v46"/><path d="M128 70h32l26 22v12h-58"/>
+            </g>
+            <rect x="40" y="66" width="82" height="30" rx="15" fill="var(--accent-soft)" opacity=".6"/>
+            <g fill="var(--primary)"><circle cx="64" cy="108" r="11"/><circle cx="160" cy="108" r="11"/></g>
+            <g fill="var(--milk)"><circle cx="64" cy="108" r="4"/><circle cx="160" cy="108" r="4"/></g>
+            <circle cx="206" cy="36" r="13" fill="var(--butter)" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 02</p>
+          <h3>Collection</h3>
+          <p>Every litre is weighed, graded and paid for. The first number the farmer sees.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Saw at first hand how cooperative decisions reach the farms that own the business.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--surface-2)"/>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linejoin="round">
+              <path d="M30 110V72l24-13v13l24-13v51z"/><path d="M92 110V40h16v70"/><path d="M22 110h100"/>
+            </g>
+            <g fill="var(--butter)" opacity=".9">
+              <ellipse cx="166" cy="74" rx="34" ry="12"/>
+              <path d="M132 74v16a34 12 0 0068 0V74z"/>
+            </g>
+            <ellipse cx="166" cy="74" rx="34" ry="12" fill="none" stroke="var(--primary)" stroke-width="2.2"/>
+            <path d="M132 74v16a34 12 0 0068 0V74" fill="none" stroke="var(--primary)" stroke-width="2.2"/>
+            <g fill="var(--milk)"><circle cx="152" cy="80" r="4"/><circle cx="176" cy="86" r="3"/></g>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 03</p>
+          <h3>Processing</h3>
+          <p>Raw milk becomes cheese, powder, whey. Where yield and recipe decide the margin.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Produced artisan alpine cheese from raw milk in Switzerland, from curd handling
+            to ripening.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--surface-2)"/>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linejoin="round">
+              <path d="M44 56h28l-4 12v38a10 10 0 01-20 0V68z"/>
+              <path d="M96 48h34v58a8 8 0 01-8 8h-18a8 8 0 01-8-8z"/>
+            </g>
+            <path d="M48 82h20v24a10 10 0 01-20 0z" fill="var(--accent-soft)" opacity=".75"/>
+            <path d="M96 76h34v30a8 8 0 01-8 8h-18a8 8 0 01-8-8z" fill="var(--accent)" opacity=".28"/>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none">
+              <path d="M152 112V74l24-16 24 16v38z"/><path d="M152 112h48"/>
+            </g>
+            <path d="M156 92h40v20h-40z" fill="var(--butter)" opacity=".75"/>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 04</p>
+          <h3>Products &amp; ingredients</h3>
+          <p>Brands and whey ingredients, where the cooperative earns its premium.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            I own the costing and profitability platform market-leading dairy companies use
+            to see what a product really costs.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--surface-2)"/>
+            <g stroke="var(--primary)" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M26 112h190"/><path d="M44 112V86M80 112V62M116 112V74M152 112V44M188 112V58"/>
+            </g>
+            <g fill="var(--accent)" opacity=".3">
+              <rect x="36" y="86" width="16" height="26"/><rect x="72" y="62" width="16" height="50"/>
+              <rect x="108" y="74" width="16" height="38"/><rect x="144" y="44" width="16" height="68"/>
+              <rect x="180" y="58" width="16" height="54"/>
+            </g>
+            <path d="M44 84 L80 60 L116 72 L152 42 L188 56" fill="none" stroke="var(--butter)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/>
+            <g fill="var(--butter)"><circle cx="44" cy="84" r="5"/><circle cx="152" cy="42" r="5"/></g>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 05</p>
+          <h3>Trade &amp; finance</h3>
+          <p>Volatile commodity markets, investment decisions, working capital.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Where I work now: investment business cases, a cost and benefit governance
+            framework, and a variance analysis that corrected a six-figure deviation.</p>
+        </div>
+      </article>
+
+      <article class="stage-card next">
+        <div class="stage-art">
+          <svg viewBox="0 0 240 140" aria-hidden="true">
+            <rect width="240" height="140" fill="var(--cream)"/>
+            <path d="M30 96 C70 96 70 50 120 50 C170 50 170 96 210 96" fill="none"
+                  stroke="var(--accent)" stroke-width="3" stroke-dasharray="7 8" stroke-linecap="round"/>
+            <g fill="var(--accent)"><circle cx="30" cy="96" r="7"/></g>
+            <g stroke="var(--primary)" stroke-width="2.4" fill="none" stroke-linejoin="round">
+              <path d="M190 112V88l20-12 20 12v24z" transform="translate(-24,0)"/>
+            </g>
+            <path d="M172 100h32v12h-32z" fill="var(--butter)" opacity=".8"/>
+            <text x="120" y="126" text-anchor="middle" fill="var(--ink-3)" font-size="13"
+                  font-family="inherit">back to the farm</text>
+          </svg>
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">The return leg · next</p>
+          <h3>Carrying the result back</h3>
+          <p>Post-merger integration, data into decisions, net working capital, and the
+             carbon figures that move into controlling as CSRD applies from 2027.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            So the farmer owners get a result they can plan and invest with.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Chronology</p>
+    <h2>Ten years, one direction</h2>
+    <p class="lede">Gold marks the turning points.</p>
+    <ol class="tl">
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">2016 – 2021</span>
+        <div class="tl-card"><h3>Matura, agriculture diploma</h3>
+          <p><img class="flag" src="assets/flags/at.svg" alt="Austria">HBLA Ursprung, Salzburg · grade 1.5</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2018</span>
+        <div class="tl-card"><h3>Dairy and cheese production</h3>
+          <p><img class="flag" src="assets/flags/ch.svg" alt="Switzerland">Moor-Dürrenwald, St. Stephan</p></div></li>
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">2019</span>
+        <div class="tl-card"><h3>First contact with Arla</h3>
+          <p><img class="flag" src="assets/flags/dk.svg" alt="Denmark">Agrovis ApS, an Arla member farm</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2021 / 22</span>
+        <div class="tl-card"><h3>Military service</h3>
+          <p><img class="flag" src="assets/flags/at.svg" alt="Austria">Austrian Armed Forces</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2022</span>
+        <div class="tl-card"><h3>Work and travel</h3>
+          <p><img class="flag" src="assets/flags/es.svg" alt="Spain"><img class="flag" src="assets/flags/pt.svg" alt="Portugal">Spain and Portugal</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2022 – 2025</span>
+        <div class="tl-card"><h3>B.Eng. Agribusiness</h3>
+          <p><img class="flag" src="assets/flags/de.svg" alt="Germany">Weihenstephan-Triesdorf · grade 1.5</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2023 / 24</span>
+        <div class="tl-card"><h3>Erasmus year</h3>
+          <p><img class="flag" src="assets/flags/ie.svg" alt="Ireland">University College Dublin</p></div></li>
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">since 2024</span>
+        <div class="tl-card"><h3>Product Owner and consulting</h3>
+          <p><img class="flag" src="assets/flags/de.svg" alt="Germany">Dairy and food consultancy, Eching</p></div></li>
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">2025</span>
+        <div class="tl-card"><h3>Intern, Global Trading and Planning Finance</h3>
+          <p><img class="flag" src="assets/flags/dk.svg" alt="Denmark">Arla Foods, Aarhus</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2025 – 2027</span>
+        <div class="tl-card"><h3>M.Sc. Management and Technology</h3>
+          <p><img class="flag" src="assets/flags/de.svg" alt="Germany">TUM<img class="flag" src="assets/flags/dk.svg" alt="Denmark">DTU, joint degree · average 1.3</p></div></li>
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">since 2026</span>
+        <div class="tl-card"><h3>Back at Arla, on the post-merger integration</h3>
+          <p><img class="flag" src="assets/flags/dk.svg" alt="Denmark">Arla Foods, Aarhus</p></div></li>
+      <li class="tl-item milestone"><span class="tl-dot"></span>
+        <span class="tl-yr">September 2027</span>
+        <div class="tl-card"><h3>Available for the Finance Graduate Programme</h3>
+          <p>Denmark preferred, Germany works equally well</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section id="map-section">
+  <div class="wrap">
+    <p class="eyebrow">Where</p>
+    <h2>Seven countries, one industry</h2>
+    <p class="lede">Select a country to see what I did there.</p>
+    <div class="map-grid">
+      <div id="map" role="img" aria-label="Map of Europe with the countries where Raphael has studied, worked or farmed"></div>
+      <div>
+        <ul class="cty" id="ctyList">
+          <li><button type="button" data-c="DK"><img class="flag" src="assets/flags/dk.svg" alt=""><span class="nm">Denmark</span><span class="dt">2019, 2025, since 2026</span></button></li>
+          <li><button type="button" data-c="DE"><img class="flag" src="assets/flags/de.svg" alt=""><span class="nm">Germany</span><span class="dt">since 2022</span></button></li>
+          <li><button type="button" data-c="IE"><img class="flag" src="assets/flags/ie.svg" alt=""><span class="nm">Ireland</span><span class="dt">2023 / 24</span></button></li>
+          <li><button type="button" data-c="CH"><img class="flag" src="assets/flags/ch.svg" alt=""><span class="nm">Switzerland</span><span class="dt">2018</span></button></li>
+          <li><button type="button" data-c="AT"><img class="flag" src="assets/flags/at.svg" alt=""><span class="nm">Austria</span><span class="dt">home</span></button></li>
+          <li><button type="button" data-c="ES"><img class="flag" src="assets/flags/es.svg" alt=""><span class="nm">Spain</span><span class="dt">2022</span></button></li>
+          <li><button type="button" data-c="PT"><img class="flag" src="assets/flags/pt.svg" alt=""><span class="nm">Portugal</span><span class="dt">2022</span></button></li>
+        </ul>
+        <div id="spotlight" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUMBERS ============ -->
+<section id="numbers" class="band-blue">
   <div class="wrap">
     <p class="eyebrow">Evidence</p>
     <h2>What came out of it</h2>
@@ -450,7 +730,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
   </div>
 </section>
 
-<!-- ================= EXPERIENCE ================= -->
+<!-- ============ EXPERIENCE ============ -->
 <section id="experience">
   <div class="wrap">
     <p class="eyebrow">Experience</p>
@@ -460,7 +740,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
       <article class="card">
         <div class="card-head">
           <div class="mono" aria-hidden="true">ARLA</div>
-          <div><h3>Arla Foods, Aarhus 🇩🇰</h3>
+          <div><h3>Arla Foods, Aarhus <img class="flag" src="assets/flags/dk.svg" alt="Denmark"></h3>
                <p class="meta">Global Trading &amp; Planning Finance</p></div>
         </div>
         <p class="role">Student Assistant · since November 2026</p>
@@ -484,7 +764,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
       <article class="card">
         <div class="card-head">
           <div class="mono" aria-hidden="true">GKC</div>
-          <div><h3>Dairy and food consultancy, Eching 🇩🇪</h3>
+          <div><h3>Dairy and food consultancy, Eching <img class="flag" src="assets/flags/de.svg" alt="Germany"></h3>
                <p class="meta">Costing, profitability and controlling for industry clients</p></div>
         </div>
         <p class="role">Product Owner &amp; Consulting · since June 2024</p>
@@ -503,7 +783,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
       <article class="card">
         <div class="card-head">
           <div class="mono" aria-hidden="true">TUM</div>
-          <div><h3>Technical University of Munich 🇩🇪</h3>
+          <div><h3>Technical University of Munich <img class="flag" src="assets/flags/de.svg" alt="Germany"></h3>
                <p class="meta">School of Management</p></div>
         </div>
         <p class="role">Student Assistant and Tutor · April to August 2026</p>
@@ -514,7 +794,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
         <div class="card-head">
           <div class="mono" aria-hidden="true">FARM</div>
           <div><h3>On the farm and in the dairy</h3>
-               <p class="meta">Agrovis ApS 🇩🇰, an Arla member farm · Moor-Dürrenwald 🇨🇭</p></div>
+               <p class="meta">Agrovis ApS, an Arla member farm · Moor-Dürrenwald</p></div>
         </div>
         <p class="role">Internships · 2018 and 2019</p>
         <ul>
@@ -528,8 +808,8 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
   </div>
 </section>
 
-<!-- ================= EDUCATION ================= -->
-<section id="education">
+<!-- ============ EDUCATION ============ -->
+<section id="education" class="band">
   <div class="wrap">
     <p class="eyebrow">Education</p>
     <h2>What I studied</h2>
@@ -539,7 +819,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
         <div class="card-head">
           <div class="mono" aria-hidden="true">TUM<br>DTU</div>
           <div><h3>M.Sc. Management and Technology — joint degree</h3>
-               <p class="meta">TU Munich 🇩🇪 → Technical University of Denmark 🇩🇰 · graduating July 2027</p></div>
+               <p class="meta">TU Munich → Technical University of Denmark · graduating July 2027</p></div>
         </div>
         <ul>
           <li><b>Current average 1.3</b> (German scale)</li>
@@ -554,7 +834,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
         <div class="card-head">
           <div class="mono" aria-hidden="true">HSWT</div>
           <div><h3>B.Eng. Agribusiness</h3>
-               <p class="meta">Weihenstephan-Triesdorf 🇩🇪 · 2022 to 2025 · Erasmus at University College Dublin 🇮🇪</p></div>
+               <p class="meta">Weihenstephan-Triesdorf · 2022 to 2025 · Erasmus at University College Dublin</p></div>
         </div>
         <ul>
           <li><b>Final grade 1.5</b></li>
@@ -569,7 +849,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
         <div class="card-head">
           <div class="mono" aria-hidden="true">HBLA</div>
           <div><h3>Matura and agriculture diploma</h3>
-               <p class="meta">HBLA Ursprung, Salzburg 🇦🇹 · 2016 to 2021</p></div>
+               <p class="meta">HBLA Ursprung, Salzburg · 2016 to 2021</p></div>
         </div>
         <ul>
           <li><b>Final grade 1.5</b></li>
@@ -582,7 +862,7 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
   </div>
 </section>
 
-<!-- ================= WHY ARLA ================= -->
+<!-- ============ WHY ARLA ============ -->
 <section id="why">
   <div class="wrap">
     <p class="eyebrow">Motivation</p>
@@ -590,14 +870,16 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
     <div class="why">
 
       <div class="why-block">
-        <h3>An industry that will always be needed</h3>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          An industry that will always be needed</h3>
         <p>People will always eat, in one form or another. I want to spend my working life
            somewhere that stays necessary, and where what I calculate has a physical
            counterpart I can stand next to.</p>
       </div>
 
       <div class="why-block">
-        <h3>A company that brings people together</h3>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="10" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15.5 20c0-2.5 1.5-4.5 4-4.5"/></svg>
+          A company that brings people together</h3>
         <p>A cooperative that takes its democratic structure seriously and uses it to connect
            people, that aims to lead rather than follow, and that lives sustainability rather
            than reporting it. A conversation with the chair of the board showed me what it
@@ -606,7 +888,8 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
       </div>
 
       <div class="why-block">
-        <h3>Carrying data into decisions</h3>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 20h18"/><path d="M6 20v-7l4-4 4 5 5-7"/></svg>
+          Carrying data into decisions</h3>
         <p>2025 showed how quickly the ground can move: firm prices in the first half, a sharp
            correction in the second. Steering a cooperative through that needs figures that are
            ready before the decision, not after it. That is the work I want to do, so the
@@ -614,7 +897,8 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
       </div>
 
       <div class="why-block">
-        <h3>Three rotations, and an honest self-assessment</h3>
+        <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 10l7-7 7 7"/></svg>
+          Three rotations, and an honest self-assessment</h3>
         <ul class="rot">
           <li><span class="n">1</span><span><b>Business and Performance</b> — closest to what I
               already do, and even there I keep running into parts of how a cooperative is
@@ -633,54 +917,104 @@ footer{background:var(--surface-2); border-top:1px solid var(--rule); padding-bl
   </div>
 </section>
 
-<!-- ================= SKILLS ================= -->
-<section id="skills">
+<!-- ============ SKILLS ============ -->
+<section id="skills" class="band-blue">
   <div class="wrap">
     <p class="eyebrow">Toolkit</p>
     <h2>How I work</h2>
     <div class="skills">
-      <div class="skill"><h3>Analysis</h3>
-        <p>Excel and VBA · Power BI and Power Query · SQL · Python</p></div>
-      <div class="skill"><h3>Business systems</h3>
-        <p>SAP BTP, Fiori and Analysis for Office · SAP Crystal Reports</p></div>
-      <div class="skill"><h3>Building</h3>
-        <p>C# and .NET · React · AI-assisted development</p></div>
-      <div class="skill"><h3>Languages</h3>
-        <p>German native · English fluent · Spanish basic · Danish, currently learning</p></div>
-      <div class="skill"><h3>Certifications</h3>
-        <p>Bloomberg Market Concepts, 2023 · Quality Officer ISO 9001, 2021</p></div>
-      <div class="skill"><h3>Scholarship</h3>
-        <p>Deutschlandstipendium 2024/25 and 2025/26, a merit award granted to the top of the year</p></div>
-      <div class="skill"><h3>Beyond work</h3>
-        <p>Bouldering, cycling and mountaineering · cooking, and a declared cheese lover ·
-           building small applications for problems I run into day to day</p></div>
-      <div class="skill"><h3>Responsibility</h3>
-        <p>Standing in for farming families in crisis · former board member of a rural youth
-           association · involved in the family business · military service</p></div>
+      <div class="skill"><h3>Analysis</h3><p>Excel and VBA · Power BI and Power Query · SQL · Python</p></div>
+      <div class="skill"><h3>Business systems</h3><p>SAP BTP, Fiori and Analysis for Office · SAP Crystal Reports</p></div>
+      <div class="skill"><h3>Building</h3><p>C# and .NET · React · AI-assisted development</p></div>
+      <div class="skill"><h3>Languages</h3><p>German native · English fluent · Spanish basic · Danish, currently learning</p></div>
+      <div class="skill"><h3>Certifications</h3><p>Bloomberg Market Concepts, 2023 · Quality Officer ISO 9001, 2021</p></div>
+      <div class="skill"><h3>Scholarship</h3><p>Deutschlandstipendium 2024/25 and 2025/26, a merit award granted to the top of the year</p></div>
+      <div class="skill"><h3>Beyond work</h3><p>Bouldering, cycling and mountaineering · cooking, and a declared cheese lover · building small applications for problems I run into day to day</p></div>
+      <div class="skill"><h3>Responsibility</h3><p>Standing in for farming families in crisis · former board member of a rural youth association · involved in the family business · military service</p></div>
     </div>
   </div>
 </section>
 
 </main>
 
-<!-- ================= CONTACT ================= -->
 <footer id="contact">
   <div class="wrap">
     <p class="eyebrow">Get in touch</p>
     <h2>Let's talk about dairy finance</h2>
-    <p class="lede">Reach me on LinkedIn. My direct contact details are in the CV that
-       accompanies my application.</p>
+    <p style="margin:.8rem 0 0;max-width:60ch;color:#CBD9E6">
+      Reach me on LinkedIn. My direct contact details are in the CV that accompanies my
+      application.
+    </p>
     <ul class="contact-links">
-      <li><a href="https://www.linkedin.com/in/raphael-gaisberger-079806241"
-             rel="noopener">LinkedIn — Raphael Gaisberger</a></li>
+      <li><a href="https://www.linkedin.com/in/raphael-gaisberger-079806241" rel="noopener">LinkedIn — Raphael Gaisberger</a></li>
     </ul>
     <p class="fine">
-      Raphael Gaisberger · Lyngby, Denmark · available from September 2027 ·
-      preferred location Denmark, Germany works equally well.
-      Institution names are shown as typographic monograms, not as logos.
+      Raphael Gaisberger · Lyngby, Denmark · available from September 2027 · preferred
+      location Denmark, Germany works equally well. Institution names are shown as
+      typographic monograms, not as logos. Flags by
+      <a href="https://github.com/lipis/flag-icons" rel="noopener">flag-icons</a> (MIT),
+      map by <a href="https://github.com/themustafaomar/jsvectormap" rel="noopener">jsVectorMap</a> (MIT).
     </p>
   </div>
 </footer>
 
+<script src="assets/vendor/jsvectormap.min.js"></script>
+<script src="assets/vendor/world-merc.js"></script>
+<script>
+(function () {
+  var STORY = {
+    DK:{n:"Denmark",t:"Arla Foods in Aarhus, twice: an internship in Global Trading and Planning Finance in 2025, and since 2026 the post-merger integration. Before that, a season on an Arla member farm. I live here, in Lyngby, and study at DTU."},
+    DE:{n:"Germany",t:"B.Eng. Agribusiness at Weihenstephan-Triesdorf, the first year of my master's at TU Munich, and since 2024 the costing and profitability platform at a dairy and food consultancy near Munich."},
+    IE:{n:"Ireland",t:"An Erasmus year at University College Dublin, in a country where dairy is run on grass and the cooperative model is as present as at home."},
+    CH:{n:"Switzerland",t:"Artisan alpine cheese from raw milk at Moor-Dürrenwald, from curd handling through to ripening, and the full daily cycle of on-farm processing."},
+    AT:{n:"Austria",t:"Home. Grew up on a dairy farm, Matura and agriculture diploma at HBLA Ursprung in Salzburg, military service, and the rural youth association whose board I served on."},
+    ES:{n:"Spain",t:"Work and travel in 2022, which is also where my Spanish comes from."},
+    PT:{n:"Portugal",t:"Work and travel in 2022, the second half of the same journey."}
+  };
+  var CODES = Object.keys(STORY);
+  var spot = document.getElementById('spotlight');
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.cty button'));
+
+  function show(code){
+    var s = STORY[code]; if(!s) return;
+    spot.innerHTML = '<strong>' + s.n + '</strong>' + s.t;
+    buttons.forEach(function(b){ b.setAttribute('aria-current', b.dataset.c === code ? 'true' : 'false'); });
+  }
+  show('DK');
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ show(b.dataset.c); });
+    b.addEventListener('mouseenter', function(){ show(b.dataset.c); });
+  });
+
+  if (typeof jsVectorMap === 'undefined') return;
+  var css = getComputedStyle(document.documentElement);
+  var v = function(n){ return css.getPropertyValue(n).trim(); };
+
+  // focusOn und selectedRegions sind Konstruktor-Optionen dieser Version;
+  // nachtraegliche Aufrufe greifen nicht zuverlaessig.
+  var map = new jsVectorMap({
+    selector:'#map', map:'world_merc',
+    zoomButtons:true, zoomOnScroll:false, backgroundColor:'transparent',
+    regionsSelectable:false,
+    selectedRegions:CODES,
+    focusOn:{ regions:CODES, animate:false },
+    regionStyle:{
+      initial:{ fill:v('--surface-2'), stroke:v('--rule-2'), strokeWidth:.5 },
+      hover:{ fill:v('--accent-2'), fillOpacity:1 },
+      selected:{ fill:v('--accent') }
+    },
+    onRegionTooltipShow:function(event, tooltip, code){
+      if (STORY[code]) { tooltip.text(STORY[code].n, true); }
+      else { event.preventDefault(); }
+    },
+    onRegionClick:function(event, code){ if (STORY[code]) show(code); }
+  });
+
+  window.addEventListener('resize', function(){
+    map.updateSize && map.updateSize();
+    map.setFocus && map.setFocus({ regions: CODES, animate: false });
+  });
+})();
+</script>
 </body>
 </html>
