@@ -406,6 +406,23 @@ svg.wheel-mini{margin:1.8rem auto 0; max-width:330px; display:block}
   border:1px solid var(--rule-2); color:var(--primary); display:grid; place-items:center;
   font-size:.78rem; font-weight:800}
 
+/* ---------- Arbeiten mit Menschen ----------
+   Bewusst ohne Foto und ohne Eigenschaftswoerter: jede Karte traegt eine
+   Verhaltensweise als Ueberschrift und einen belegten Fall darunter. */
+.pcards{display:grid; gap:1.2rem; margin:2rem 0 0; grid-template-columns:1fr}
+@media (min-width:780px){ .pcards{grid-template-columns:1fr 1fr} }
+.pcard{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.3rem 1.4rem 1.4rem; box-shadow:var(--shadow);
+  border-left:3px solid var(--accent-soft)
+}
+.pcard h3{color:var(--primary); font-size:1.03rem; display:flex; gap:.6rem; align-items:flex-start}
+.pcard h3 svg{
+  width:1.25rem; height:1.25rem; flex:none; margin-top:.1rem; color:var(--butter);
+  fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round
+}
+.pcard p{margin:.6rem 0 0; color:var(--ink-2); font-size:.95rem}
+
 /* ---------- Fachgebiete unter der Ausbildung ---------- */
 .subjects{display:flex; flex-wrap:wrap; gap:.45rem; margin:.95rem 0 0; padding:0; list-style:none}
 .subjects li{
@@ -504,6 +521,7 @@ footer a{color:#CFE2F2}
       <li><a href="#chain">Dairy chain</a></li>
       <li><a href="#timeline">Timeline</a></li>
       <li><a href="#experience">Experience</a></li>
+      <li><a href="#people">People</a></li>
       <li><a href="#skills">How I work</a></li>
       <li><a href="#education">Education</a></li>
       <li><a href="#map-section">Where</a></li>
@@ -1012,8 +1030,52 @@ footer a{color:#CFE2F2}
   </div>
 </section>
 
+<!-- ============ WORKING WITH PEOPLE ============ -->
+<section id="people">
+  <div class="wrap">
+    <p class="eyebrow">People</p>
+    <h2>How I work with people</h2>
+    <p class="lede">An analysis only becomes a decision once the person acting on it
+       understands it. This is the half of the job that does not show up in a tool list.</p>
+
+    <div class="pcards">
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M4 12h7"/><path d="M13 17h7M16 14l-3 3 3 3"/><path d="M11 10l3-3-3-3"/></svg>
+          Translating in both directions</h3>
+        <p>Most of my work sits between the people who hold the figures and the people who act
+           on them: between experts and management, between a production floor and a
+           spreadsheet, and at Arla between two organisations growing together.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0112 7.6 4.5 4.5 0 0119.5 11c0 5.4-7.5 10-7.5 10z"/></svg>
+          The relationship, not just the deliverable</h3>
+        <p>I own a costing platform and the client relationships behind it: requirements,
+           training, and the questions that arrive on a Tuesday afternoon. Building the tool is
+           the straightforward part.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="17" cy="11" r="2.6"/><path d="M2.5 20c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5M15 20c0-2.3 1.4-4.2 3.7-4.2"/></svg>
+          The answer usually sits with someone else</h3>
+        <p>I work in a team because the person who knows why a figure looks wrong is rarely the
+           one who found it. Tracing the six-figure deviation meant asking production, not
+           re-reading the report.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10.5V16c0 1.4 2.2 2.6 5 2.6s5-1.2 5-2.6v-5.5"/><path d="M21 8v6"/></svg>
+          Explaining it so it holds</h3>
+        <p>120 students mentored and examined in operations management, and client training
+           alongside it. Teaching a thing is the fastest way to find out whether you have
+           understood it yourself.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
 <!-- ============ NUMBERS ============ -->
-<section id="numbers">
+<section id="numbers" class="band">
   <div class="wrap">
     <p class="eyebrow">Evidence</p>
     <h2>What came out of it</h2>
@@ -1029,7 +1091,7 @@ footer a{color:#CFE2F2}
 </section>
 
 <!-- ============ SKILLS ============ -->
-<section id="skills" class="band">
+<section id="skills">
   <div class="wrap">
     <div class="photo-band">
       <img src="assets/img/band-toolkit.jpg" alt="" width="1800" height="480" loading="lazy" decoding="async">
@@ -1104,7 +1166,7 @@ footer a{color:#CFE2F2}
 </section>
 
 <!-- ============ EDUCATION ============ -->
-<section id="education">
+<section id="education" class="band">
   <div class="wrap">
     <p class="eyebrow">Education</p>
     <h2>What I studied</h2>
@@ -1175,7 +1237,7 @@ footer a{color:#CFE2F2}
 </section>
 
 <!-- ============ MAP ============ -->
-<section id="map-section" class="band">
+<section id="map-section">
   <div class="wrap">
     <div class="photo-band">
       <img src="assets/img/band-globe.jpg" alt="" width="1800" height="480" loading="lazy" decoding="async">
