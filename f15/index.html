@@ -1,0 +1,1410 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raphael Gaisberger — Dairy leadership</title>
+<meta name="description" content="Raphael Gaisberger — the dairy value chain from the farm to the figures. Application for the Arla Future15 Graduate Programme 2027.">
+<!-- Erreichbar, aber nicht auffindbar: Wer den Link bekommt, sieht die Seite;
+     eine Namenssuche findet sie nicht. Das meta-robots-Tag ist das wirksame
+     Mittel dafuer, nicht die robots.txt. -->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<meta name="googlebot" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+<!-- Tab-Bild: Monogramm RG. 32 px deckt den Tab auch auf Bildschirmen mit
+     doppelter Punktdichte ab, 180 px den Startbildschirm auf dem Telefon. -->
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+<link rel="stylesheet" href="../assets/vendor/jsvectormap.min.css">
+<style>
+/* ============================================================
+   TOKENS
+   Eine Blaufamilie plus warme Molkereitoene. Ein zweiter Buntton
+   (Weidegruen) wurde geprueft und verworfen: nur Delta-E 14 zum
+   Akzentblau, also fuer farbfehlsichtige Leser nicht sicher
+   unterscheidbar. Unterschiede laufen daher ueber Helligkeit,
+   Strichelung und Form, nicht ueber einen zweiten Farbton.
+   ============================================================ */
+/* Schriften liegen neben der Seite; beim Aufruf geht keine Verbindung zu einem
+   Schriftdienst hinaus. Beide sind variabel, also eine Datei je Familie. */
+@font-face{
+  font-family:"Inter var"; font-style:normal; font-weight:400 700; font-display:swap;
+  src:url("assets/fonts/inter-latin.woff2") format("woff2");
+}
+@font-face{
+  font-family:"Source Serif var"; font-style:normal; font-weight:400 700; font-display:swap;
+  src:url("assets/fonts/sourceserif-latin.woff2") format("woff2");
+}
+
+:root{
+  /* Nur zwei Flaechen: Papier und ein warmes Band. Der dritte, blaugraue Ton
+     ist entfallen, er hat die Abfolge der Abschnitte unruhig gemacht. */
+  --milk:#FFFFFF;
+  --cream:#F6F2EA;
+  --surface:#FFFFFF;
+  --surface-2:#F1F4F7;
+  --primary:#10263A;
+  --accent:#1F5C8B;
+  --accent-2:#4A7FA8;
+  --accent-soft:#A9C3D8;
+  --butter:#C9962F;
+  --butter-ink:#8A6A1E;   /* Gold als Schriftfarbe: hell genug ist zu wenig Kontrast */
+  --ink:#1E2A34;
+  --ink-2:#4A5560;
+  --ink-3:#656F78;
+  --rule:#E5DFD3;
+  --rule-2:#DCE2E8;
+  --shadow:0 1px 2px rgba(16,38,58,.05), 0 10px 28px rgba(16,38,58,.07);
+  --radius:14px;
+  --maxw:1120px;
+  --sans:"Inter var",-apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+  --serif:"Source Serif var",Georgia,"Times New Roman",serif;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --milk:#0F1620; --cream:#141D27; --surface:#17212C; --surface-2:#1D2833;
+    --primary:#BFD8EE; --accent:#7FB0DC; --accent-2:#5E95C4; --accent-soft:#3E5E7C;
+    --butter:#E0B45F; --butter-ink:#E0B45F;
+    --ink:#E9ECEF; --ink-2:#B4BDC6; --ink-3:#8E98A1;
+    --rule:#28323D; --rule-2:#2E3B48;
+    --shadow:0 1px 2px rgba(0,0,0,.3), 0 10px 28px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="dark"]{
+  --milk:#0F1620; --cream:#141D27; --surface:#17212C; --surface-2:#1D2833;
+  --primary:#BFD8EE; --accent:#7FB0DC; --accent-2:#5E95C4; --accent-soft:#3E5E7C;
+  --butter:#E0B45F; --butter-ink:#E0B45F;
+  --ink:#E9ECEF; --ink-2:#B4BDC6; --ink-3:#8E98A1;
+  --rule:#28323D; --rule-2:#2E3B48;
+}
+
+*{box-sizing:border-box}
+/* Grid- und Flexkinder duerfen sonst nicht unter ihre Inhaltsbreite
+   schrumpfen und erzeugen horizontalen Ueberlauf. */
+.hero-grid>*,.chain-step>*,.tl-item>*,.map-grid>*,.card-head>*,
+.rot li>*,.stat,.skill,.card,.why-block,.stage-card{min-width:0}
+
+body{
+  margin:0; background:var(--milk); color:var(--ink);
+  font-family:var(--sans); font-size:16.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  font-feature-settings:"kern" 1;
+}
+/* Zahlen laufen ueber die ganze Seite: Jahre, Noten, Kennzahlen. Tabellenziffern
+   halten sie gleich breit, damit untereinander nichts springt. */
+.stat b,.tl-yr,.stage-no,.role,time,.cty .dt{font-variant-numeric:tabular-nums}
+img{max-width:100%}
+a{color:var(--accent); text-underline-offset:2px}
+a:focus-visible,button:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+
+.wrap{max-width:var(--maxw); margin:0 auto; padding-inline:22px}
+section{padding-block:clamp(3rem,7vw,5.2rem); scroll-margin-top:72px}
+.band{background:var(--cream)}
+
+/* Serif nur fuer die grossen Ueberschriften. Kleine Kartentitel bleiben in der
+   Grotesk, dort ist sie auf engem Raum besser lesbar. */
+h1,h2{
+  font-family:var(--serif); font-weight:600; line-height:1.12; margin:0;
+  color:var(--primary); letter-spacing:-.005em
+}
+h2{font-size:clamp(1.55rem,3.7vw,2.25rem)}
+h3{font-size:1.05rem; line-height:1.3; margin:0; color:var(--ink); font-weight:650}
+.lede{color:var(--ink-2); max-width:62ch; margin:.75rem 0 0; font-size:1.02rem}
+.eyebrow{
+  display:flex; align-items:center; gap:.6rem;
+  font-size:.72rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:700; margin:0 0 .6rem
+}
+.eyebrow::before{content:""; width:1.6rem; height:2px; background:var(--butter); flex:none}
+
+/* ---------- Kopfleiste ----------
+   Faehrt erst nach dem ersten Bildschirm ein. Die Seite ist lang; ohne sie
+   muesste ein Leser alles durchscrollen, um zu sehen, was noch kommt. */
+.topbar{
+  position:fixed; inset:0 0 auto 0; z-index:50;
+  background:var(--milk);
+  background:color-mix(in srgb, var(--milk) 86%, transparent);
+  -webkit-backdrop-filter:saturate(1.5) blur(12px);
+  backdrop-filter:saturate(1.5) blur(12px);
+  border-bottom:1px solid transparent;
+  transform:translateY(-100%); transition:transform .28s ease, border-color .28s ease
+}
+.topbar.on{transform:none; border-bottom-color:var(--rule-2)}
+.topbar .wrap{display:flex; align-items:center; gap:1.4rem; height:56px}
+.tb-name{
+  font-family:var(--serif); font-weight:600; font-size:1rem; color:var(--primary);
+  text-decoration:none; white-space:nowrap; flex:none
+}
+.tb-links{
+  display:flex; gap:1.15rem; margin:0 0 0 auto; padding:0; list-style:none;
+  overflow-x:auto; scrollbar-width:none; -ms-overflow-style:none
+}
+.tb-links::-webkit-scrollbar{display:none}
+.tb-links a{
+  color:var(--ink-2); text-decoration:none; font-size:.86rem; font-weight:500;
+  white-space:nowrap; padding-block:.4rem
+}
+.tb-links a:hover{color:var(--accent)}
+@media (max-width:640px){
+  .topbar .wrap{gap:.9rem; padding-inline:16px}
+  .tb-links{gap:.95rem}
+  .tb-links a{font-size:.82rem}
+}
+
+/* ---------- Flaggen ---------- */
+.flag{
+  width:1.35em; height:1.01em; border-radius:2px; vertical-align:-.12em;
+  object-fit:cover; box-shadow:0 0 0 1px rgba(0,0,0,.12); flex:none
+}
+
+/* ---------- Logo-Plaketten ----------
+   Die Plakette bleibt in beiden Modi weiss. Logos tragen ihre eigenen Farben,
+   und ein dunkler Grund macht die Wortmarken mit schwarzer Schrift unlesbar.
+   Feste Hoehe, freie Breite: so stehen quadratische Zeichen und breite
+   Wortmarken nebeneinander, ohne dass eines gequetscht wird. */
+.logo-plate,.mono{
+  width:148px; height:56px; background:#fff; border:1px solid var(--rule-2); border-radius:11px;
+  padding:0 11px; display:grid; place-items:center; flex:none;
+  box-shadow:0 1px 2px rgba(21,53,79,.07)
+}
+.logo-plate img{max-height:34px; max-width:124px; display:block}
+.logo-plate.duo{grid-auto-flow:column; gap:11px}
+.logo-plate.duo img{max-width:50px}
+/* Feste Tinte: in der dunklen Fassung waere --primary hellblau und auf dem
+   weissen Schild nicht mehr lesbar. */
+.mono{color:#15354F; font-weight:800; font-size:.86rem; letter-spacing:.06em; line-height:1.1}
+@media (max-width:559px){
+  .logo-plate,.mono{width:104px; height:50px; padding:0 9px}
+  .logo-plate img{max-height:28px; max-width:84px}
+  .logo-plate.duo img{max-width:36px}
+  .mono{font-size:.76rem}
+}
+
+/* ---------- Fotos ----------
+   Alle Bildflaechen teilen sich dieselbe Mechanik: randabfallend zuschneiden
+   und unten leicht abdunkeln, damit die Kante zur Karte ruhig bleibt. */
+.ph{width:100%; height:100%; object-fit:cover; display:block}
+.ph-scrim::after{
+  content:""; position:absolute; inset:auto 0 0 0; height:42%; pointer-events:none;
+  background:linear-gradient(180deg,rgba(14,32,48,0),rgba(14,32,48,.22))
+}
+
+/* Breites Bildband, das die Abschnittsueberschrift traegt */
+.photo-band{
+  position:relative; border-radius:var(--radius); overflow:hidden;
+  box-shadow:var(--shadow); isolation:isolate; margin:0 0 2rem
+}
+.photo-band>img{width:100%; height:clamp(168px,21vw,236px); object-fit:cover; display:block}
+/* Der Verlauf traegt die Beschriftung weiter nach rechts als frueher, weil die
+   Unterzeile auf breiten Schirmen in einer Zeile stehen soll. */
+.photo-band::after{
+  content:""; position:absolute; inset:0;
+  background:linear-gradient(95deg,rgba(14,32,48,.92) 0%,rgba(14,32,48,.82) 58%,rgba(14,32,48,.22) 100%)
+}
+.photo-band .cap{
+  position:absolute; inset:0; z-index:1; display:flex; flex-direction:column;
+  justify-content:center; padding:1.2rem clamp(1.1rem,3vw,2rem); max-width:min(100%,660px)
+}
+.photo-band .cap h2{color:#fff}
+.photo-band .cap .eyebrow{color:#C6D8E8; margin-bottom:.45rem}
+.photo-band .cap .lede{color:#DCE6EF; margin-top:.5rem; font-size:.95rem; max-width:none}
+
+/* ---------- HERO ---------- */
+.hero{padding-block:clamp(2.6rem,7vw,4.6rem); position:relative; overflow:hidden}
+.hero::after{ /* warme Lichtflaeche statt steriler Flaeche */
+  content:""; position:absolute; inset:auto -10% -55% 40%; height:70%;
+  background:radial-gradient(closest-side, rgba(217,164,65,.16), transparent 70%);
+  pointer-events:none
+}
+.hero-grid{display:grid; gap:clamp(1.6rem,4vw,3rem); grid-template-columns:1fr; position:relative}
+@media (min-width:820px){ .hero-grid{grid-template-columns:1fr auto; align-items:start} }
+.hero h1{font-size:clamp(2.4rem,6.4vw,3.7rem); letter-spacing:-.012em}
+.tagline{
+  color:var(--accent); font-size:clamp(1.05rem,2.7vw,1.3rem);
+  margin:.4rem 0 0; font-weight:650
+}
+.profile-text{margin:1.4rem 0 0; max-width:58ch; font-size:1.06rem; color:var(--ink-2)}
+.profile-text strong{color:var(--ink); font-weight:650}
+.portrait-frame{position:relative; justify-self:start}
+.portrait{
+  width:clamp(210px,46vw,290px); height:clamp(210px,46vw,290px);
+  border-radius:50%; object-fit:cover; object-position:center 18%;
+  box-shadow:0 0 0 6px var(--milk), 0 0 0 8px var(--accent-soft), var(--shadow);
+  display:block
+}
+.chips{display:flex; flex-wrap:wrap; gap:.55rem; margin:1.5rem 0 0; padding:0; list-style:none}
+.chip{
+  background:var(--surface); color:var(--ink-2); border:1px solid var(--rule-2);
+  border-radius:999px; padding:.34rem .9rem; font-size:.85rem; font-weight:600;
+  display:inline-flex; align-items:center; gap:.45rem
+}
+.chip svg{width:1rem; height:1rem; color:var(--accent); flex:none}
+
+/* ---------- MILK WHEEL ---------- */
+.wheel-wrap{display:none; margin:2rem 0 0}
+/* Auf schmalen Geraeten traegt eine kompakte Ringfassung ohne Aussenbeschriftung;
+   die Stationen stehen darunter in der Dairy Chain ohnehin ausgeschrieben.
+   Die Kompaktfassung traegt beide Klassen (.wheel .wheel-mini). Deshalb sind diese
+   Regeln mit dem Element qualifiziert: sonst gewinnt das spaeter notierte .wheel
+   bei gleicher Spezifitaet, und beide Raeder stehen gleichzeitig auf der Seite. */
+svg.wheel-mini{margin:1.8rem auto 0; max-width:330px; display:block}
+.mini-legend{
+  list-style:none; margin:1.1rem 0 0; padding:0; display:grid; gap:.4rem;
+  grid-template-columns:1fr 1fr; font-size:.84rem; color:var(--ink-2)
+}
+.mini-legend li{display:flex; gap:.45rem; align-items:center}
+.mini-legend .k{width:.7rem;height:.7rem;border-radius:50%;background:var(--accent);flex:none}
+.mini-legend .k.next{background:var(--surface);border:2px solid var(--accent-soft)}
+@media (min-width:900px){
+  .wheel-wrap{display:block}
+  svg.wheel-mini{display:none}
+  ul.mini-legend{display:none}
+}
+.wheel{width:100%; height:auto; max-width:890px; margin-inline:auto; display:block}
+.wheel .ring-done{fill:none; stroke:var(--accent); stroke-width:10; opacity:.9}
+.wheel .ring-next{fill:none; stroke:var(--accent-soft); stroke-width:10; stroke-dasharray:3 13; stroke-linecap:round}
+.wheel .hub{fill:var(--surface)}
+.wheel .hub-ring{fill:none; stroke:var(--rule-2); stroke-width:1.5}
+.wheel .pod{fill:var(--surface); stroke:var(--accent); stroke-width:2.5}
+.wheel .pod-next{fill:var(--surface); stroke:var(--accent-soft); stroke-width:2.5; stroke-dasharray:4 4}
+.wheel .ico{fill:none; stroke:var(--accent); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.wheel .ico-next{stroke:var(--accent-2)}
+.wheel .lbl{fill:var(--primary); font-size:14px; font-weight:700}
+.wheel .sub{fill:var(--ink-3); font-size:12px}
+.wheel .hub-a{fill:var(--primary); font-size:15px; font-weight:700}
+.wheel .hub-b{fill:var(--ink-2); font-size:12.5px}
+.wheel .butter{fill:var(--butter)}
+
+/* ---------- DAIRY CHAIN ---------- */
+/* Sechs Stufen: feste Spaltenzahlen statt auto-fit, sonst entsteht auf breiten
+   Schirmen eine 4er-Reihe mit zwei Nachzueglern. 2x3 und 3x2 teilen sauber. */
+.stages{display:grid; gap:1.2rem; margin:2rem 0 0; grid-template-columns:1fr}
+@media (min-width:620px){ .stages{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:980px){ .stages{grid-template-columns:repeat(3,1fr)} }
+.stage-card{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow); display:flex; flex-direction:column
+}
+.stage-art{
+  height:164px; background:linear-gradient(170deg,var(--surface-2),var(--cream));
+  display:grid; place-items:center; border-bottom:1px solid var(--rule-2); position:relative;
+  overflow:hidden
+}
+.stage-art svg{width:100%; height:100%; display:block}
+.stage-body{padding:1.05rem 1.15rem 1.25rem}
+.stage-no{
+  font-size:.7rem; letter-spacing:.12em; text-transform:uppercase;
+  color:var(--butter-ink); font-weight:800
+}
+.stage-card h3{margin:.25rem 0 0; font-size:1.02rem; color:var(--primary)}
+.stage-card p{margin:.45rem 0 0; color:var(--ink-2); font-size:.93rem}
+.stage-card .mine{
+  margin:.7rem 0 0; padding-top:.7rem; border-top:1px dashed var(--rule-2);
+  color:var(--ink); font-size:.9rem; display:flex; gap:.5rem; align-items:flex-start
+}
+.stage-card .mine svg{width:1.05rem;height:1.05rem;color:var(--accent);flex:none;margin-top:.15rem}
+.stage-card.next{border-style:dashed; background:linear-gradient(180deg,var(--surface),var(--cream))}
+.stage-card.next .stage-no{color:var(--accent)}
+
+/* ---------- TIMELINE ---------- */
+.tl{position:relative; margin:2.2rem 0 0; padding:0; list-style:none}
+.tl::before{
+  content:""; position:absolute; left:11px; top:.4rem; bottom:.4rem; width:3px;
+  background:linear-gradient(180deg,var(--accent),var(--accent-soft)); border-radius:2px
+}
+@media (min-width:860px){ .tl::before{left:50%; transform:translateX(-50%)} }
+.tl-item{position:relative; padding:0 0 1.5rem 2.6rem}
+@media (min-width:860px){
+  .tl-item{width:50%; padding:0 0 2rem 0}
+  .tl-item:nth-child(odd){margin-left:0; padding-right:2.6rem; text-align:right}
+  .tl-item:nth-child(even){margin-left:50%; padding-left:2.6rem}
+}
+.tl-dot{
+  position:absolute; left:3px; top:.42rem; width:19px; height:19px; border-radius:50%;
+  background:var(--surface); border:3px solid var(--accent); z-index:1
+}
+@media (min-width:860px){
+  .tl-item:nth-child(odd) .tl-dot{left:auto; right:-9.5px}
+  .tl-item:nth-child(even) .tl-dot{left:-9.5px}
+}
+.tl-yr{color:var(--accent); font-weight:800; font-variant-numeric:tabular-nums; font-size:.86rem; letter-spacing:.02em; display:block}
+.tl-card{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:12px;
+  padding:.8rem 1rem; margin-top:.3rem; box-shadow:var(--shadow); display:block;
+  max-width:100%; text-align:left
+}
+/* Erst ab zwei Spalten schrumpft die Karte auf ihren Inhalt. Darunter stehen
+   Jahr und Karte strikt untereinander, sonst wird die Kante links unruhig. */
+@media (min-width:860px){ .tl-card{display:inline-block} }
+.tl-card h3{font-size:.98rem}
+.tl-card p{margin:.2rem 0 0; color:var(--ink-2); font-size:.9rem; display:flex; align-items:center; gap:.45rem; flex-wrap:wrap}
+
+/* ---------- MAP ---------- */
+.map-grid{display:grid; gap:1.4rem; grid-template-columns:1fr; margin:2rem 0 0}
+@media (min-width:900px){ .map-grid{grid-template-columns:1.25fr .75fr} }
+#map{
+  height:clamp(330px,52vw,470px); background:var(--surface);
+  border:1px solid var(--rule-2); border-radius:var(--radius); box-shadow:var(--shadow)
+}
+.jvm-tooltip{font-family:var(--sans)!important; font-size:.85rem!important}
+.cty{list-style:none; margin:0; padding:0; display:grid; gap:.4rem; align-content:start}
+.cty button{
+  width:100%; display:grid; grid-template-columns:auto 1fr auto; gap:.7rem; align-items:center;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:10px;
+  padding:.6rem .8rem; font:inherit; color:inherit; text-align:left; cursor:pointer
+}
+.cty button:hover,.cty button[aria-current="true"]{border-color:var(--accent); background:var(--surface-2)}
+.cty .nm{font-weight:650; font-size:.94rem}
+.cty .dt{color:var(--ink-3); font-size:.84rem}
+#spotlight{
+  margin-top:.9rem; background:var(--surface-2); border:1px solid var(--rule-2);
+  border-radius:12px; padding:.9rem 1rem; color:var(--ink-2); font-size:.92rem; min-height:4.6rem
+}
+#spotlight strong{display:block; color:var(--primary); font-size:1rem; margin-bottom:.2rem}
+
+/* ---------- STATS ---------- */
+/* Sechs Kacheln, deshalb feste Spaltenzahlen: auto-fit stellt vier nebeneinander
+   und laesst zwei allein in der zweiten Reihe stehen. */
+.stats{list-style:none; margin:2rem 0 0; padding:0; display:grid; gap:1rem;
+  grid-template-columns:1fr}
+@media (min-width:560px){ .stats{grid-template-columns:repeat(2,1fr)} }
+@media (min-width:900px){ .stats{grid-template-columns:repeat(3,1fr)} }
+.stat{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.15rem 1.25rem; box-shadow:var(--shadow); position:relative; overflow:hidden}
+.stat::before{content:""; position:absolute; left:0; top:0; bottom:0; width:4px; background:var(--butter)}
+.stat b{display:block; font-size:1.6rem; color:var(--primary); line-height:1.1; letter-spacing:-.02em}
+.stat span{display:block; margin-top:.35rem; color:var(--ink-2); font-size:.9rem}
+
+/* ---------- CARDS ---------- */
+.cards{display:grid; gap:1.15rem; margin:2rem 0 0}
+.card{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.3rem; box-shadow:var(--shadow)}
+.card-head{display:grid; grid-template-columns:auto 1fr; gap:.95rem; align-items:start}
+/* Geometrie und Grundfarben stehen oben bei .logo-plate: beide Kacheln muessen
+   gleich breit sein, sonst beginnen die Textspalten der Karten versetzt. */
+.mono{text-align:center}
+/* Normaler Textfluss, kein Flex: sonst rutscht die Flagge in eine eigene Zeile,
+   sobald der Name umbricht (auf dem Handy der Regelfall). */
+.card h3{margin:0}
+.card h3 .flag{margin-left:.28em}
+.meta{color:var(--ink-3); font-size:.88rem; margin:.15rem 0 0}
+.prior{color:var(--ink-3); font-size:.88rem; margin:.7rem 0 0; font-variant-numeric:tabular-nums}
+.role{color:var(--accent); font-style:italic; font-size:.96rem; margin:.65rem 0 0; font-weight:600}
+.card ul{margin:.5rem 0 0; padding-left:1.15rem; color:var(--ink-2)}
+.card li{margin:.32rem 0; font-size:.94rem}
+.card li::marker{color:var(--butter)}
+
+/* ---------- WHY ---------- */
+.why{display:grid; gap:1.3rem; margin:2rem 0 0}
+@media (min-width:840px){ .why{grid-template-columns:1fr 1fr} }
+.why-block{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column}
+.why-art{height:156px; position:relative; border-bottom:1px solid var(--rule-2); overflow:hidden}
+.why-body{padding:1.2rem 1.35rem 1.4rem}
+.why-block h3{color:var(--primary); font-size:1.04rem; display:flex; gap:.55rem; align-items:center}
+.why-block h3 svg{width:1.2rem;height:1.2rem;color:var(--butter);flex:none}
+.why-block p{margin:.6rem 0 0; color:var(--ink-2); font-size:.96rem}
+.rot{list-style:none; margin:.75rem 0 0; padding:0; display:grid; gap:.65rem}
+.rot li{display:grid; grid-template-columns:auto 1fr; gap:.7rem; font-size:.94rem; color:var(--ink-2)}
+.rot b{color:var(--ink); font-weight:650}
+.rot .n{width:1.6rem; height:1.6rem; border-radius:50%; background:var(--surface-2);
+  border:1px solid var(--rule-2); color:var(--primary); display:grid; place-items:center;
+  font-size:.78rem; font-weight:800}
+
+/* ---------- Arbeiten mit Menschen ----------
+   Bewusst ohne Foto und ohne Eigenschaftswoerter: jede Karte traegt eine
+   Verhaltensweise als Ueberschrift und einen belegten Fall darunter. */
+.pcards{display:grid; gap:1.2rem; margin:2rem 0 0; grid-template-columns:1fr}
+@media (min-width:780px){ .pcards{grid-template-columns:1fr 1fr} }
+.pcard{
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.3rem 1.4rem 1.4rem; box-shadow:var(--shadow);
+  border-left:3px solid var(--accent-soft)
+}
+.pcard h3{color:var(--primary); font-size:1.03rem; display:flex; gap:.6rem; align-items:flex-start}
+.pcard h3 svg{
+  width:1.25rem; height:1.25rem; flex:none; margin-top:.1rem; color:var(--butter);
+  fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round
+}
+.pcard p{margin:.6rem 0 0; color:var(--ink-2); font-size:.95rem}
+
+/* ---------- Fachgebiete unter der Ausbildung ---------- */
+.subjects{display:flex; flex-wrap:wrap; gap:.45rem; margin:.95rem 0 0; padding:0; list-style:none}
+.subjects li{
+  display:inline-flex; align-items:center; gap:.4rem; font-size:.8rem; color:var(--ink-2);
+  background:var(--surface-2); border:1px solid var(--rule-2); border-radius:999px;
+  padding:.3rem .65rem; line-height:1.3
+}
+.subjects svg{width:.95rem; height:.95rem; color:var(--accent); flex:none;
+  fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round}
+
+/* ---------- SKILLS ---------- */
+/* Breite Karte fuer die Themen ausserhalb der Arbeit. Sie stehen vor dem
+   Werkzeugkasten, weil sie mehr ueber die Person sagen als eine Softwareliste. */
+.feature{
+  display:grid; grid-template-columns:1fr; margin:1.8rem 0 0;
+  background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  overflow:hidden; box-shadow:var(--shadow)
+}
+.feature.lead{border-top:3px solid var(--butter)}
+.feature-art{position:relative; height:220px; overflow:hidden}
+.feature-art img{width:100%; height:100%; object-fit:cover; display:block}
+.feature-body{padding:1.5rem 1.6rem 1.7rem}
+@media (min-width:760px){
+  .feature{grid-template-columns:minmax(240px,36%) 1fr}
+  .feature-art{height:auto; min-height:100%}
+  /* Beim Spiegeln muss auch das Raster mitdrehen, sonst landet das Bild in der
+     breiten Spalte und der Text wird in die schmale gequetscht. */
+  .feature.flip{grid-template-columns:1fr minmax(240px,36%)}
+  .feature.flip .feature-art{order:2}
+}
+.kicker{
+  font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--accent); font-weight:800; margin:0 0 .4rem
+}
+.feature-body h3{font-family:var(--serif); font-weight:600; font-size:1.3rem; color:var(--primary)}
+.feature-body>p{margin:.6rem 0 0; color:var(--ink-2); font-size:.97rem}
+.facts{list-style:none; margin:1rem 0 0; padding:0; display:grid; gap:.5rem}
+.facts li{display:grid; grid-template-columns:auto 1fr; gap:.6rem; font-size:.93rem; color:var(--ink-2)}
+.facts svg{width:1.05rem; height:1.05rem; color:var(--butter); flex:none; margin-top:.18rem;
+  fill:none; stroke:currentColor; stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+.facts b{color:var(--ink); font-weight:650}
+
+.awards{display:grid; gap:1.1rem; margin:1.4rem 0 0; grid-template-columns:1fr}
+@media (min-width:680px){ .awards{grid-template-columns:1fr 1fr} }
+.award{background:var(--surface); border:1px solid var(--rule-2); border-radius:var(--radius);
+  padding:1.1rem 1.25rem; box-shadow:var(--shadow)}
+
+.tools-head{
+  margin:2.4rem 0 0; font-size:.72rem; letter-spacing:.15em; text-transform:uppercase;
+  color:var(--ink-3); font-weight:800; display:flex; align-items:center; gap:.6rem
+}
+.tools-head::after{content:""; height:1px; background:var(--rule-2); flex:1}
+.skills{display:grid; gap:1.1rem 1.6rem; margin:1.1rem 0 0;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr))}
+.skill h3{font-size:.96rem; color:var(--primary)}
+.skill p{margin:.35rem 0 0; color:var(--ink-2); font-size:.93rem}
+
+/* ---------- FOOTER ---------- */
+/* Feste Farbe statt --primary: in der dunklen Fassung ist --primary hellblau,
+   und der Fuss wurde damit zu einer hellen Flaeche mit fast weisser Schrift. */
+footer{background:#12304A; color:#E8EEF4; padding-block:3rem}
+footer h2,footer .eyebrow{color:#fff}
+footer .eyebrow{color:#B9CEE2}
+footer a{color:#CFE2F2}
+.contact-links{display:flex; flex-wrap:wrap; gap:.8rem 1.5rem; margin:1rem 0 0; padding:0; list-style:none; font-weight:650}
+.fine{color:#9FB7CD; font-size:.84rem; margin:1.8rem 0 0; max-width:70ch}
+.sig{height:78px; width:auto; display:block; margin:1.7rem 0 .2rem}
+
+@media print{
+  :root{--milk:#fff;--cream:#fff;--surface:#fff;--surface-2:#f4f4f4;--ink:#111;--ink-2:#333;--rule-2:#bbb;--shadow:none}
+  body{font-size:11pt} section{padding-block:1rem; break-inside:avoid}
+  .wheel-wrap,#map,.topbar{display:none}
+  /* Fotos kosten im Druck nur Toner und tragen dort nichts bei. Das Bildband
+     wird flachgelegt, damit seine Ueberschrift lesbar bleibt. */
+  .stage-art,.why-art{display:none}
+  .photo-band{box-shadow:none; margin-bottom:1rem}
+  .photo-band>img,.photo-band::after{display:none}
+  .photo-band .cap{position:static; padding:0; max-width:none}
+  .photo-band .cap h2{color:#111}
+  .photo-band .cap .eyebrow,.photo-band .cap .lede{color:#333}
+  .card,.stat,.why-block,.stage-card{break-inside:avoid}
+  footer{background:#fff;color:#111} footer h2{color:#111}
+}
+@media (prefers-reduced-motion:reduce){ *{animation:none!important; transition:none!important} }
+</style>
+</head>
+<body>
+
+<!-- ============ HERO: Profil zuerst ============ -->
+<nav class="topbar" id="topbar" aria-label="Sections of this page">
+  <div class="wrap">
+    <a class="tb-name" href="#top">Raphael Gaisberger</a>
+    <ul class="tb-links">
+      <li><a href="#why">Why Arla</a></li>
+      <li><a href="#wheel">Milk wheel</a></li>
+      <li><a href="#chain">Dairy chain</a></li>
+      <li><a href="#timeline">Timeline</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#skills">How I work</a></li>
+      <li><a href="#people">People</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#map-section">Where</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <p class="eyebrow">Arla Future15 Graduate Programme 2027 Candidate</p>
+      <h1>Raphael Gaisberger</h1>
+      <p class="tagline">Taking the lead across the dairy business</p>
+      <p class="profile-text">
+        <strong>Leading in dairy is what I am aiming for, and I have done it before it had a
+        title: on a farm, when illness stopped a family and somebody had to step in.</strong> At Arla I turned investment cases and cost analyses into decisions
+        senior leaders could act on. The culture and strategic direction I experienced
+        during that time fully convinced me. This led me to join the post-merger
+        integration and to write my thesis on net working capital optimisation for dairy
+        stocks. Growing up on a dairy farm, I know what it means when the result ends up
+        as the farmer owner's milk price. That is why I am eager to grow with Arla over
+        the long term and contribute to Feed Life, by leveraging the experience I will gain
+        as part of the Future15 Graduate Programme.
+      </p>
+      <ul class="chips">
+        <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>Available from September 2027</li>
+        <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>Open to relocate</li>
+        <li class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a15 15 0 010 18a15 15 0 010-18"/></svg>Globally mobile</li>
+      </ul>
+    </div>
+    <div class="portrait-frame">
+      <img class="portrait" src="../assets/img/portrait.jpg" alt="Raphael Gaisberger"
+           width="290" height="290">
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ============ WHY ARLA ============ -->
+<section id="why" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Motivation</p>
+    <h2>Why Arla, and why Future15</h2>
+    <div class="why">
+
+      <div class="why-block">
+        <div class="why-art ph-scrim">
+          <img class="ph" src="../assets/img/why-industry.jpg" alt="Dairy cows on pasture in evening light"
+               width="900" height="500" loading="lazy" decoding="async">
+        </div>
+        <div class="why-body">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            A company owned by the people I grew up among</h3>
+          <p>On our farm the milk price was never a market quotation. It was the result of
+             decisions taken a long way away, by people we had to trust to get them right. I
+             would like to become one of those people, in an industry that will always be
+             needed because we need to Feed Life.</p>
+        </div>
+      </div>
+
+      <div class="why-block">
+        <div class="why-art ph-scrim">
+          <img class="ph" src="../assets/img/why-people.jpg" alt="Four people standing arm in arm, looking out over a valley"
+               width="900" height="500" loading="lazy" decoding="async">
+        </div>
+        <div class="why-body">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="3.5"/><circle cx="17" cy="10" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15.5 20c0-2.5 1.5-4.5 4-4.5"/></svg>
+            A project only lands if people want it to</h3>
+          <p>Arla is a cooperative that takes its democratic structure seriously and uses it to
+             connect people, that aims to lead rather than follow, and that lives sustainability
+             rather than reporting it. A conversation with the chair of the board showed me what
+             those values mean for the owners. And the &ldquo;little&rdquo; things, like Friday
+             breakfast with the team, showed me how much people want to be there.</p>
+        </div>
+      </div>
+
+      <div class="why-block">
+        <div class="why-art ph-scrim">
+          <img class="ph" src="../assets/img/why-performance.jpg" alt="A dashboard with bar and donut charts on a laptop screen"
+               width="900" height="500" loading="lazy" decoding="async">
+        </div>
+        <div class="why-body">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v18M5 10l7-7 7 7"/></svg>
+            Responsibility from day one, and more of it each rotation</h3>
+          <p>The programme hands you a business-critical project in the first rotation and lets
+             you shape the next two. That is the right order: earn the judgement first, then use
+             it. I would rather be given something that matters and be told where I can improve
+             than be kept safe for two years.</p>
+        </div>
+      </div>
+
+      <div class="why-block">
+        <div class="why-art ph-scrim">
+          <img class="ph" src="../assets/img/why-strategy.jpg" alt="Chess pieces set up at the start of a game"
+               width="900" height="500" loading="lazy" decoding="async">
+        </div>
+        <div class="why-body">
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7h10l3 4h5M3 7v10h4M12 17h5"/><circle cx="8" cy="17" r="2"/><circle cx="19" cy="17" r="2"/></svg>
+            Three functions, and the one I know least</h3>
+          <ul class="rot">
+            <li><span class="n">1</span><span><b>Supply Chain</b> &mdash; where I can contribute
+                from the first day: my thesis is net working capital on dairy stocks, and before
+                that I made cheese from raw milk and ran a herd.</span></li>
+            <li><span class="n">2</span><span><b>Strategy &amp; Business Development</b> &mdash;
+                closest to what I do now, where investment cases and a cost and benefit
+                governance framework are the daily work.</span></li>
+            <li><span class="n">3</span><span><b>Marketing &amp; Sales</b> &mdash; where I have
+                nothing to show yet and the most to learn, which is exactly why I want three
+                functions rather than one role.</span></li>
+          </ul>
+          <p>Two of the three rotations are abroad. That is not a condition I accept, it is a
+             reason I am applying: seven countries studied and worked in, many more visited, and
+             wherever Arla sends me, I will go.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ MILK WHEEL ============ -->
+<section id="wheel">
+  <div class="wrap">
+    <p class="eyebrow">The through line</p>
+    <h2>My milk wheel: in a cooperative the value chain turns full circle</h2>
+    <p class="lede">
+      Milk leaves the farm, gains value at every stage, and the result comes back to the
+      same farms as a milk price. I have stood on the solid part of the wheel. The dotted
+      part closes the circle: the post-merger integration, net working capital optimisation of
+      dairy stocks, and the Future15 Graduate Programme as the place to carry it through.
+    </p>
+
+    <svg class="wheel wheel-mini" viewBox="0 0 320 320" role="img" aria-label="My milk wheel in compact form: five stages worked, three steps ahead, the result returning to the farm">
+      <path class="ring-done" d="M160 30 A130 130 0 0 1 160 290" stroke-width="8"/>
+      <path class="ring-next" d="M160 290 A130 130 0 0 1 160 30" stroke-width="8"/>
+      <circle class="hub" cx="160" cy="160" r="66"/><circle class="hub-ring" cx="160" cy="160" r="66"/>
+      <g transform="translate(160,138)">
+        <path class="ico" d="M-10 -12h20l-3 8v11a7 7 0 01-14 0v-11z"/>
+        <path class="butter" d="M-7 2h14v5a7 7 0 01-14 0z" stroke="none"/>
+      </g>
+      <text class="hub-a" x="160" y="176" text-anchor="middle" font-size="12.5">The result returns</text>
+      <text class="hub-b" x="160" y="192" text-anchor="middle" font-size="11">as a milk price</text>
+      <g transform="translate(160,30)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-9) scale(.72)"><path d="M2 16V8l12-7 12 7v8"/><path d="M2 16h24v9H2z"/></g></g>
+      <g transform="translate(252,68)"><circle class="pod" r="21"/><g class="ico" transform="translate(-11,-8) scale(.68)"><path d="M1 17V6h17v11"/><path d="M18 9h7l6 5v3h-13"/><circle cx="8" cy="19" r="3"/><circle cx="24" cy="19" r="3"/></g></g>
+      <g transform="translate(290,160)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-9) scale(.68)"><path d="M2 25V12l9-5v5l9-5v18z"/><path d="M24 25V2h5v23"/></g></g>
+      <g transform="translate(252,252)"><circle class="pod" r="21"/><g class="ico" transform="translate(-9,-10) scale(.68)"><path d="M4 2h18v26H4z"/><path d="M8 21l4-5 3.5 3.5L22 11"/></g></g>
+      <g transform="translate(160,290)"><circle class="pod" r="21"/><g class="ico" transform="translate(-10,-8) scale(.7)"><path d="M1 23h27"/><path d="M5 23V13M12 23V6M19 23V16M26 23V9"/></g></g>
+      <g transform="translate(91,243)"><circle class="pod-next" r="18"/><g class="ico ico-next" transform="translate(-9,-8) scale(.68)"><circle cx="7" cy="7" r="5"/><circle cx="19" cy="15" r="5"/><path d="M11 10l4 2"/></g></g>
+      <g transform="translate(52,160)"><circle class="pod-next" r="18"/><g class="ico ico-next" transform="translate(-8,-8) scale(.7)"><circle cx="11" cy="11" r="10"/><path d="M11 5v12M8 8h6M8 14h6"/></g></g>
+      <g transform="translate(91,77)"><circle class="pod-next" r="18"/><g class="ico ico-next" transform="translate(-8,-6) scale(.68)"><path d="M1 8L12 3l11 5-11 5z"/><path d="M5 11v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/><path d="M22 8.5v6"/></g></g>
+    </svg>
+    <ul class="mini-legend wheel-mini">
+      <li><span class="k"></span>Farm</li><li><span class="k"></span>Collection</li>
+      <li><span class="k"></span>Processing</li>
+      <li><span class="k"></span>Costing &amp; consulting</li><li><span class="k"></span>Trade &amp; finance</li>
+      <li><span class="k next"></span>Post-merger integration</li>
+      <li><span class="k next"></span>Net working capital, dairy stocks</li>
+      <li><span class="k next"></span>Future15 Graduate Programme</li>
+    </ul>
+
+    <div class="wheel-wrap">
+      <!-- Die viewBox reicht links ueber die Null hinaus: die Beschriftungen des
+           Rueckwegs sind rechtsbuendig und die laengsten der ganzen Grafik. -->
+      <svg class="wheel" viewBox="-60 0 920 560" role="img" aria-labelledby="wTitle wDesc">
+        <title id="wTitle">My milk wheel</title>
+        <desc id="wDesc">A circle of five value chain stages where Raphael has worked, and a
+          dotted stretch that closes the circle in three steps he wants to take next, ending
+          with the Future15 Graduate Programme and leading back to the farm.</desc>
+
+        <path class="ring-done" d="M430 90 A190 190 0 0 1 430 470"/>
+        <path class="ring-next" d="M430 470 A190 190 0 0 1 430 90"/>
+
+        <!-- Nabe -->
+        <circle class="hub" cx="430" cy="280" r="96"/>
+        <circle class="hub-ring" cx="430" cy="280" r="96"/>
+        <circle class="hub-ring" cx="430" cy="280" r="86"/>
+        <g transform="translate(430,246)">
+          <path class="ico" d="M-13 -16h26l-4 10v14a9 9 0 01-18 0v-14z"/>
+          <path class="butter" d="M-9 2h18v6a9 9 0 01-18 0z" stroke="none"/>
+        </g>
+        <text class="hub-a" x="430" y="292" text-anchor="middle">The result returns</text>
+        <text class="hub-b" x="430" y="311" text-anchor="middle">as a milk price for</text>
+        <text class="hub-b" x="430" y="327" text-anchor="middle">the farmer owners</text>
+
+        <!-- Station 1: Farm (oben) -->
+        <g transform="translate(430,90)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-14,-13)">
+            <path d="M2 16V8l12-7 12 7v8"/><path d="M2 16h24v9H2z"/><path d="M11 25v-6h6v6"/>
+          </g>
+          <text class="lbl" x="0" y="-62" text-anchor="middle">Farm</text>
+          <text class="sub" x="0" y="-45" text-anchor="middle">grew up on one, still stand in</text>
+        </g>
+        <!-- Station 2: Collection -->
+        <g transform="translate(575,135)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-16,-11)">
+            <path d="M1 17V6h17v11"/><path d="M18 9h7l6 5v3h-13"/>
+            <circle cx="8" cy="19" r="3"/><circle cx="24" cy="19" r="3"/>
+          </g>
+          <text class="lbl" x="44" y="-4" text-anchor="start">Collection</text>
+          <text class="sub" x="44" y="13" text-anchor="start">saw what the farmer gets paid</text>
+        </g>
+        <!-- Station 3: Processing -->
+        <g transform="translate(635,280)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-15,-13)">
+            <path d="M2 25V12l9-5v5l9-5v18z"/><path d="M24 25V2h5v23"/><path d="M2 25h27"/>
+          </g>
+          <text class="lbl" x="44" y="-4" text-anchor="start">Processing</text>
+          <text class="sub" x="44" y="13" text-anchor="start">made cheese from raw milk</text>
+        </g>
+        <!-- Station 4: Beratung. Keine Stufe der Kette, sondern der Schnitt quer
+             durch sie - und die Stelle, an der aus Zahlen Entscheidungen werden. -->
+        <g transform="translate(575,425)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-13,-14)">
+            <path d="M4 2h18v26H4z"/><path d="M8 21l4-5 3.5 3.5L22 11"/>
+          </g>
+          <text class="lbl" x="44" y="-4" text-anchor="start">Costing &amp; consulting</text>
+          <text class="sub" x="44" y="13" text-anchor="start">financial data into decisions</text>
+        </g>
+        <!-- Station 4: Trade and finance (unten) -->
+        <g transform="translate(430,470)">
+          <circle class="pod" r="31"/>
+          <g class="ico" transform="translate(-14,-12)">
+            <path d="M1 23h27"/><path d="M5 23V13M12 23V6M19 23V16M26 23V9"/>
+          </g>
+          <text class="lbl" x="0" y="52" text-anchor="middle">Trade &amp; finance</text>
+          <text class="sub" x="0" y="69" text-anchor="middle">business cases and variance analysis</text>
+        </g>
+        <!-- Rueckweg: drei Stationen, von unten nach oben gelesen. Sie liegen auf
+             dem linken Halbkreis bei 220, 270 und 320 Grad, gemessen vom Scheitel
+             im Uhrzeigersinn, Radius 205 um (430,280). -->
+        <g transform="translate(298,437)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-13,-11)">
+            <circle cx="7" cy="7" r="5"/><circle cx="19" cy="15" r="5"/><path d="M11 10l4 2"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Post-merger integration</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">aligning two finance teams</text>
+        </g>
+        <g transform="translate(225,280)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-12,-12)">
+            <circle cx="11" cy="11" r="10"/><path d="M11 5v12M8 8h6M8 14h6"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Net working capital</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">optimisation of dairy stocks, my thesis</text>
+        </g>
+        <g transform="translate(298,123)">
+          <circle class="pod-next" r="28"/>
+          <g class="ico ico-next" transform="translate(-11.5,-9)">
+            <path d="M1 8L12 3l11 5-11 5z"/><path d="M5 11v5c0 1.7 3.1 3 7 3s7-1.3 7-3v-5"/>
+            <path d="M22 8.5v6"/>
+          </g>
+          <text class="lbl" x="-40" y="-4" text-anchor="end">Future15 Graduate Programme</text>
+          <text class="sub" x="-40" y="13" text-anchor="end">from September 2027</text>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DAIRY CHAIN ============ -->
+<section id="chain" class="band">
+  <div class="wrap">
+    <p class="eyebrow">My dairy chain, stage by stage</p>
+    <h2>What I actually did at each stage</h2>
+
+    <div class="stages">
+
+      <article class="stage-card">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-farm.jpg" alt="A herd of dairy cows on pasture at sunset"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 01</p>
+          <h3>Farm</h3>
+          <p>Where the milk and the cost base both begin.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Grew up on one. Ran daily milk production and herd management on an Arla owner's
+            farm, and still stand in when illness stops a family.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-collection.jpg" alt="A milk tanker on a Danish road"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 02</p>
+          <h3>Collection</h3>
+          <p>Every litre is weighed, graded and paid for. The first number the farmer sees.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Saw at first hand how cooperative decisions reach the farms that own the business.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-processing.jpg" alt="Curd being cut by hand in a copper cheese vat"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 03</p>
+          <h3>Processing</h3>
+          <p>Raw milk becomes cheese, powder, whey. Where yield and recipe decide the margin.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Produced artisan alpine cheese from raw milk in Switzerland, from curd handling
+            to ripening.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-products.jpg" alt="A board of cut cheese with grapes"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 04</p>
+          <h3>Products &amp; ingredients</h3>
+          <p>Brands and whey ingredients, where the cooperative earns its premium.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            I own the costing and profitability platform market-leading dairy companies use
+            to see what a product really costs.</p>
+        </div>
+      </article>
+
+      <article class="stage-card">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-finance.jpg" alt="Two people going through figures and charts at a table"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Stage 05</p>
+          <h3>Trade &amp; finance</h3>
+          <p>Volatile commodity markets, investment decisions, working capital.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6L9 17l-5-5"/></svg>
+            Where I work now: investment business cases, a cost and benefit governance
+            framework, and a variance analysis that corrected a six-figure deviation.</p>
+        </div>
+      </article>
+
+      <article class="stage-card next">
+        <div class="stage-art ph-scrim">
+          <img class="ph" src="../assets/img/stage-return.jpg" alt="A seedling growing out of a glass full of coins"
+               width="1000" height="560" loading="lazy" decoding="async">
+        </div>
+        <div class="stage-body">
+          <p class="stage-no">Closing the circle · next</p>
+          <h3>Carrying the result back</h3>
+          <p>Post-merger integration, net working capital for dairy stocks, and the carbon
+             figures that move into controlling as CSRD applies from 2027.</p>
+          <p class="mine"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            So Arla and the farmer owners get a result they can plan and invest with.</p>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ TIMELINE ============ -->
+<section id="timeline">
+  <div class="wrap">
+    <p class="eyebrow">Chronology</p>
+    <h2>Ten years, one direction &mdash; and many more to come</h2>
+    <ol class="tl">
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2016 – 2021</span>
+        <div class="tl-card"><h3>Matura, agriculture diploma</h3>
+          <p><img class="flag" src="../assets/flags/at.svg" alt="Austria">HBLA Ursprung, Salzburg · grade 1.5</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2018</span>
+        <div class="tl-card"><h3>Dairy and cheese production</h3>
+          <p><img class="flag" src="../assets/flags/ch.svg" alt="Switzerland">Moor-Dürrenwald, St. Stephan</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2019</span>
+        <div class="tl-card"><h3>First contact with Arla</h3>
+          <p><img class="flag" src="../assets/flags/dk.svg" alt="Denmark">Agrovis ApS, an Arla member farm</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2021 / 22</span>
+        <div class="tl-card"><h3>Military service</h3>
+          <p><img class="flag" src="../assets/flags/at.svg" alt="Austria">Austrian Armed Forces</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2022</span>
+        <div class="tl-card"><h3>Work and travel</h3>
+          <p><img class="flag" src="../assets/flags/es.svg" alt="Spain"><img class="flag" src="../assets/flags/pt.svg" alt="Portugal">Spain and Portugal</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2022 – 2025</span>
+        <div class="tl-card"><h3>B.Eng. Agribusiness</h3>
+          <p><img class="flag" src="../assets/flags/de.svg" alt="Germany">Weihenstephan-Triesdorf · grade 1.5</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2023 / 24</span>
+        <div class="tl-card"><h3>Erasmus year</h3>
+          <p><img class="flag" src="../assets/flags/ie.svg" alt="Ireland">University College Dublin</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2024 / 25</span>
+        <div class="tl-card"><h3>Intern</h3>
+          <p><img class="flag" src="../assets/flags/de.svg" alt="Germany">Dairy and food consultancy, Eching</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2025</span>
+        <div class="tl-card"><h3>Intern, Global Trading and Planning Finance</h3>
+          <p><img class="flag" src="../assets/flags/dk.svg" alt="Denmark">Arla Foods, Aarhus</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2025 / 26</span>
+        <div class="tl-card"><h3>Working Student</h3>
+          <p><img class="flag" src="../assets/flags/de.svg" alt="Germany">Dairy and food consultancy, Eching</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">2025 – 2027</span>
+        <div class="tl-card"><h3>M.Sc. Management and Technology</h3>
+          <p><img class="flag" src="../assets/flags/de.svg" alt="Germany">TUM<img class="flag" src="../assets/flags/dk.svg" alt="Denmark">DTU, joint degree · average 1.4</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">since 2026</span>
+        <div class="tl-card"><h3>Product Owner and consulting</h3>
+          <p><img class="flag" src="../assets/flags/de.svg" alt="Germany">Dairy and food consultancy, Eching</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">since 2026</span>
+        <div class="tl-card"><h3>Back at Arla, on the post-merger integration</h3>
+          <p><img class="flag" src="../assets/flags/dk.svg" alt="Denmark">Arla Foods, Aarhus</p></div></li>
+      <li class="tl-item"><span class="tl-dot"></span>
+        <span class="tl-yr">September 2027</span>
+        <div class="tl-card"><h3>Available for the Future15 Graduate Programme</h3>
+          <p>Ready for the first rotation, wherever it is</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ EXPERIENCE ============ -->
+<section id="experience" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Experience</p>
+    <h2>Where I have worked</h2>
+    <div class="cards">
+
+      <article class="card">
+        <div class="card-head">
+          <div class="logo-plate"><img src="../assets/logos/arla.svg" alt="Arla Foods" width="150" height="100"></div>
+          <div><h3>Arla Foods, Aarhus <img class="flag" src="../assets/flags/dk.svg" alt="Denmark"></h3>
+               <p class="meta">Global Trading &amp; Planning Finance</p></div>
+        </div>
+        <p class="role">Student Assistant · since November 2026</p>
+        <ul>
+          <li>Responsibility for parts of the post-merger integration, aligning reporting, processes and
+              communication and building the relationships across both organisations</li>
+          <li>Master's thesis: an inventory management system for dairy product stocks,
+              designed to optimise net working capital</li>
+        </ul>
+        <p class="role">Intern · June to September 2025</p>
+        <ul>
+          <li>Created a cost and benefit governance framework for future investment decisions
+              across a seven-figure IT portfolio, and analysed the business cases behind it</li>
+          <li>Translated complex data into clear insights that resolved net working capital
+              issues with one of the largest customers</li>
+          <li>Drove production cost variance analysis that corrected a six-figure reporting
+              deviation</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="mono" aria-hidden="true">GKC</div>
+          <div><h3>Dairy and food consultancy, Eching <img class="flag" src="../assets/flags/de.svg" alt="Germany"></h3>
+               <p class="meta">Cost accounting and controlling for the dairy and food industry</p></div>
+        </div>
+        <p class="role">Product Owner &amp; Consulting · since 2026</p>
+        <ul>
+          <li>Own a costing and profitability platform, from development to day-to-day support;
+              its figures are what controlling and management steer the business on</li>
+          <li>Shape the controlling systems of more than five market-leading dairy companies</li>
+          <li>Replaced scattered analyses with one documented process, cutting calculation
+              time by 20 to 50 per cent and enabling fast margin decisions in volatile markets</li>
+          <li>The platform grew out of my bachelor's thesis with the firm: the conceptual design
+              of an online costing tool for the dairy industry, now in use at market-leading
+              dairy clients</li>
+        </ul>
+        <p class="role">Working Student &amp; Intern · 2024 to 2026</p>
+        <ul>
+          <li>Researched and tested new technology, above all AI, and built cases that pay off</li>
+          <li>Evaluated Life Cycle Assessment methods for ESG reporting and CO<sub>2</sub> accounting</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="logo-plate"><img src="../assets/logos/tum.svg" alt="Technical University of Munich" width="408" height="212"></div>
+          <div><h3>Technical University of Munich <img class="flag" src="../assets/flags/de.svg" alt="Germany"></h3>
+               <p class="meta">School of Management</p></div>
+        </div>
+        <p class="role">Student Assistant and Tutor · April to August 2026</p>
+        <ul><li>Mentored 120 students and assessed their examinations in operations management</li></ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="mono" aria-hidden="true">FARM</div>
+          <div><h3>On the farm and in the dairy</h3>
+               <p class="meta"><img class="flag" src="../assets/flags/dk.svg" alt="Denmark"> Agrovis ApS, an Arla member farm
+                 · <img class="flag" src="../assets/flags/ch.svg" alt="Switzerland"> Moor-Dürrenwald</p></div>
+        </div>
+        <p class="role">Internships · 2018 and 2019</p>
+        <ul>
+          <li>Ran daily milk production, herd management and operations on an Arla owner's farm,
+              and saw at first hand how cooperative decisions reach the farmers who own Arla</li>
+          <li>Produced artisan alpine cheese from raw milk, from curd handling to ripening</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ NUMBERS ============ -->
+<section id="numbers">
+  <div class="wrap">
+    <p class="eyebrow">Evidence</p>
+    <h2>What came out of it</h2>
+    <p class="lede">Every one of these started as a problem somebody needed solved.</p>
+    <ul class="stats">
+      <li class="stat"><b>Seven figures</b><span>IT investment portfolio covered by the cost and benefit governance framework I built</span></li>
+      <li class="stat"><b>Six figures</b><span>Reporting deviation traced and corrected through production cost variance analysis</span></li>
+      <li class="stat"><b>20–50%</b><span>Less calculation time after replacing scattered analyses with one documented process</span></li>
+      <li class="stat"><b>120</b><span>Students mentored and examined in operations management</span></li>
+      <li class="stat"><b>80</b><span>Members in the regional association whose board I served on</span></li>
+      <li class="stat"><b>5+</b><span>Farms I have run at short notice when illness or an emergency stopped a family</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SKILLS ============ -->
+<section id="skills" class="band">
+  <div class="wrap">
+    <div class="photo-band">
+      <img src="../assets/img/band-toolkit.jpg" alt="" width="1800" height="480" loading="lazy" decoding="async">
+      <div class="cap">
+        <p class="eyebrow">Toolkit</p>
+        <h2>How I work</h2>
+        <p class="lede">What I do when the screen is off, and the tools I reach for when it is on.</p>
+      </div>
+    </div>
+    <article class="feature lead">
+      <div class="feature-art ph-scrim">
+        <img class="ph" src="../assets/img/resp.jpg" alt="Dairy cows close up in evening light"
+             width="760" height="760" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <p class="kicker">Responsibility</p>
+        <h3>A dairy farm does not pause for an emergency</h3>
+        <p>When illness or an accident stops a family, the cows still have to be milked that
+           evening. I have taken a farm over at short notice more than five times, and I still
+           do. It is the part of this industry that made me want to work for the people who
+           own it.</p>
+        <ul class="facts">
+          <li><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21v-6h6v6"/></svg>
+            <span><b>Five farms and more</b> run at short notice when illness or an emergency
+            stopped a family</span></li>
+          <li><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.2"/><circle cx="17" cy="10" r="2.8"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15.5 20c0-2.5 1.5-4.5 4-4.5"/></svg>
+            <span><b>Board member</b> of a rural youth association with 80 members</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 3l9 5v8l-9 5-9-5V8z"/><path d="M12 12v9M3 8l9 4 9-4"/></svg>
+            <span><b>Involved in the family business</b>, from the daily work to the decisions
+            behind it</span></li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.4 8.6-8 10-4.6-1.4-8-5-8-10V6z"/></svg>
+            <span><b>Military service</b> with the Austrian Armed Forces</span></li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="feature flip">
+      <div class="feature-art ph-scrim">
+        <img class="ph" src="../assets/img/beyond.jpg" alt="Cheese and grapes on a wooden board"
+             width="900" height="500" loading="lazy" decoding="async">
+      </div>
+      <div class="feature-body">
+        <p class="kicker">Beyond work</p>
+        <h3>Away from the desk</h3>
+        <p>Following the stock and commodity markets, which is where the interest in Finance
+           started long before it was a job. Bouldering, cycling and mountaineering. Cooking,
+           and a declared cheese lover — which is not unrelated to the industry I chose. And
+           building small applications for problems I run into day to day.</p>
+      </div>
+    </article>
+
+    <div class="awards">
+      <div class="award">
+        <h3>Scholarship</h3>
+        <p class="meta">Deutschlandstipendium 2024/25 and 2025/26, a merit award granted to the
+           top of the year</p>
+      </div>
+      <div class="award">
+        <h3>Certifications</h3>
+        <p class="meta">Bloomberg Market Concepts, 2023 · Quality Officer ISO 9001, 2021</p>
+      </div>
+    </div>
+
+    <p class="tools-head">Tools</p>
+    <div class="skills">
+      <div class="skill"><h3>Analysis</h3><p>Excel and VBA · Power BI and Power Query · SQL · Python</p></div>
+      <div class="skill"><h3>Business systems</h3><p>SAP BTP, Fiori and Analysis for Office · SAP Crystal Reports</p></div>
+      <div class="skill"><h3>Building</h3><p>C# and .NET · React · AI-assisted development</p></div>
+      <div class="skill"><h3>Languages</h3><p>German native · English fluent · Spanish basic · Danish, currently learning</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WORKING WITH PEOPLE ============ -->
+<section id="people">
+  <div class="wrap">
+    <p class="eyebrow">People</p>
+    <h2>How I work with people</h2>
+    <p class="lede">An analysis only becomes a decision once the person acting on it
+       understands it. This is the half of the job that does not show up in a tool list.</p>
+
+    <div class="pcards">
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M4 12h7"/><path d="M13 17h7M16 14l-3 3 3 3"/><path d="M11 10l3-3-3-3"/></svg>
+          Translating in both directions</h3>
+        <p>Most of my work sits between the people who hold the figures and the people who act
+           on them: between experts and management, between a production floor and a
+           spreadsheet, and at Arla between two organisations growing together. Knowing which
+           stakeholder needs which version of the same figure is most of the work.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-7.5-10A4.5 4.5 0 0112 7.6 4.5 4.5 0 0119.5 11c0 5.4-7.5 10-7.5 10z"/></svg>
+          The relationship, not just the deliverable</h3>
+        <p>I own a costing platform and the client relationships behind it: requirements,
+           training, and the questions that arrive on a Tuesday afternoon. Building the tool is
+           the straightforward part.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="17" cy="11" r="2.6"/><path d="M2.5 20c0-3 2.5-5.5 5.5-5.5s5.5 2.5 5.5 5.5M15 20c0-2.3 1.4-4.2 3.7-4.2"/></svg>
+          The answer usually sits with someone else</h3>
+        <p>I work in a team because the person who knows why a figure looks wrong is rarely the
+           one who found it. Tracing the six-figure deviation meant asking production, not
+           re-reading the report.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8l9-4 9 4-9 4z"/><path d="M7 10.5V16c0 1.4 2.2 2.6 5 2.6s5-1.2 5-2.6v-5.5"/><path d="M21 8v6"/></svg>
+          Explaining it so it holds</h3>
+        <p>120 students mentored and examined in operations management, and client training
+           alongside it. Teaching a thing is the fastest way to find out whether you have
+           understood it yourself.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 15a2 2 0 01-2 2H8l-5 4V5a2 2 0 012-2h14a2 2 0 012 2z"/><path d="M8 9h8M8 13h5"/></svg>
+          Being told where I can improve</h3>
+        <p>Growth stops the moment nobody tells you where you can improve. What I want most
+           from two years of rotations is to work close to the managers who make these
+           decisions, and the feedback and the constant push to develop further are a large
+           part of why this programme appeals.</p>
+      </article>
+
+      <article class="pcard">
+        <h3><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="2.4"/><circle cx="5" cy="6" r="2.1"/><circle cx="19" cy="6" r="2.1"/><circle cx="5" cy="18" r="2.1"/><circle cx="19" cy="18" r="2.1"/><path d="M6.6 7.4l3.8 3.2M17.4 7.4l-3.8 3.2M6.6 16.6l3.8-3.2M17.4 16.6l-3.8-3.2"/></svg>
+          A network already in this industry</h3>
+        <p>Consulting has put me in front of finance and controlling people across the dairy
+           industry — the ones who actually run the numbers. I would like to keep building that
+           network inside Arla.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EDUCATION ============ -->
+<section id="education" class="band">
+  <div class="wrap">
+    <p class="eyebrow">Education</p>
+    <h2>What I studied</h2>
+    <div class="cards">
+
+      <article class="card">
+        <div class="card-head">
+          <div class="logo-plate duo"><img src="../assets/logos/tum.svg" alt="TU Munich" width="408" height="212"><img src="../assets/logos/dtu.svg" alt="Technical University of Denmark" width="49" height="71"></div>
+          <div><h3>M.Sc. Management and Technology — joint degree</h3>
+               <p class="meta">TU Munich, then Technical University of Denmark · graduating July 2027</p></div>
+        </div>
+        <ul>
+          <li><b>Current average 1.4</b> (German scale)</li>
+          <li>Thesis with Arla: net working capital optimisation of dairy stocks</li>
+          <li>Investment decisions: cost-benefit analysis across products, facilities and sales</li>
+          <li>Optimisation of operations and supply chains to save costs and enhance sustainability</li>
+          <li>Information systems: managing data, building apps and how AI enables decisions</li>
+        </ul>
+        <ul class="subjects">
+          <li><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M8 6h8M8 11h3M8 15h3M8 19h3M15 11v8"/></svg>Investment appraisal</li>
+          <li><svg viewBox="0 0 24 24"><path d="M3 20h18M6 20v-6M11 20V9M16 20v-9M21 20V5"/></svg>Performance steering</li>
+          <li><svg viewBox="0 0 24 24"><path d="M3 7h10l3 4h5M3 7v10h4M12 17h5"/><circle cx="8" cy="17" r="2"/><circle cx="19" cy="17" r="2"/></svg>Operations &amp; supply chain</li>
+          <li><svg viewBox="0 0 24 24"><rect x="8" y="8" width="8" height="8" rx="1.5"/><path d="M12 2v6M12 16v6M2 12h6M16 12h6M5 5l3 3M19 5l-3 3M5 19l3-3M19 19l-3-3"/></svg>Data &amp; AI</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="logo-plate duo"><img src="../assets/logos/hswt.svg" alt="Weihenstephan-Triesdorf" width="68" height="68"><img src="../assets/logos/ucd.svg" alt="University College Dublin" width="90" height="131"></div>
+          <div><h3>B.Eng. Agribusiness</h3>
+               <p class="meta">Weihenstephan-Triesdorf · 2022 to 2025 · Erasmus at University College Dublin</p></div>
+        </div>
+        <ul>
+          <li><b>Final grade 1.5</b></li>
+          <li>Thesis: conceptual design of a costing tool, now in use at market-leading dairy clients</li>
+          <li>Accounting and financial management: from the books to steering on cost and margin</li>
+          <li>Consumer behaviour and regulation: what decides volume and price in food retail</li>
+          <li>Agribusiness transformation: how sustainability targets affect the value chains</li>
+        </ul>
+        <ul class="subjects">
+          <li><svg viewBox="0 0 24 24"><path d="M12 2v20M7 6h8a3 3 0 010 6H9a3 3 0 000 6h8"/></svg>Accounting &amp; finance</li>
+          <li><svg viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v10a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1z"/></svg>Costing tools</li>
+          <li><svg viewBox="0 0 24 24"><path d="M6 2h12l-1 6a5 5 0 01-10 0z"/><path d="M9 14h6M12 14v6M9 22h6"/></svg>Food markets</li>
+          <li><svg viewBox="0 0 24 24"><path d="M12 21c0-7 4-11 9-11-1 7-4 11-9 11z"/><path d="M12 21c0-5-3-8-7-8 1 5 3 8 7 8zM12 21v-8"/></svg>Sustainability</li>
+        </ul>
+      </article>
+
+      <article class="card">
+        <div class="card-head">
+          <div class="logo-plate"><img src="../assets/logos/hbla.svg" alt="HBLA Ursprung" width="405" height="111"></div>
+          <div><h3>Matura and agriculture diploma</h3>
+               <p class="meta">HBLA Ursprung, Salzburg · 2016 to 2021</p></div>
+        </div>
+        <ul>
+          <li><b>Final grade 1.5</b></li>
+          <li>Thesis: reduction of ammonia emissions from agricultural waste with tannins</li>
+          <li>Farm management and agricultural production, with a focus on sustainability</li>
+        </ul>
+        <ul class="subjects">
+          <li><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 01-1 1H4a1 1 0 01-1-1z"/><path d="M9 21v-6h6v6"/></svg>Farm management</li>
+          <li><svg viewBox="0 0 24 24"><path d="M4 20c0-5 3-9 8-9s8 4 8 9"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>Agricultural production</li>
+          <li><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 13l3 3 5-7"/></svg>Emissions research</li>
+        </ul>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- ============ MAP ============ -->
+<section id="map-section">
+  <div class="wrap">
+    <div class="photo-band">
+      <img src="../assets/img/band-globe.jpg" alt="" width="1800" height="480" loading="lazy" decoding="async">
+      <div class="cap">
+        <p class="eyebrow">Where</p>
+        <h2>Seven countries, one industry</h2>
+        <p class="lede">Seven countries, four languages, and an open mind about how things are
+           done elsewhere: arrive, learn the local way, judge it afterwards. Select a country
+           to see what I did there.</p>
+      </div>
+    </div>
+    <div class="map-grid">
+      <div id="map" role="img" aria-label="Map of Europe with the countries where Raphael has studied, worked or farmed"></div>
+      <div>
+        <ul class="cty" id="ctyList">
+          <li><button type="button" data-c="DK"><img class="flag" src="../assets/flags/dk.svg" alt=""><span class="nm">Denmark</span><span class="dt">2019, 2025, since 2026</span></button></li>
+          <li><button type="button" data-c="DE"><img class="flag" src="../assets/flags/de.svg" alt=""><span class="nm">Germany</span><span class="dt">since 2022</span></button></li>
+          <li><button type="button" data-c="IE"><img class="flag" src="../assets/flags/ie.svg" alt=""><span class="nm">Ireland</span><span class="dt">2023 / 24</span></button></li>
+          <li><button type="button" data-c="CH"><img class="flag" src="../assets/flags/ch.svg" alt=""><span class="nm">Switzerland</span><span class="dt">2018</span></button></li>
+          <li><button type="button" data-c="AT"><img class="flag" src="../assets/flags/at.svg" alt=""><span class="nm">Austria</span><span class="dt">home</span></button></li>
+          <li><button type="button" data-c="ES"><img class="flag" src="../assets/flags/es.svg" alt=""><span class="nm">Spain</span><span class="dt">2022</span></button></li>
+          <li><button type="button" data-c="PT"><img class="flag" src="../assets/flags/pt.svg" alt=""><span class="nm">Portugal</span><span class="dt">2022</span></button></li>
+        </ul>
+        <div id="spotlight" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+</main>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="eyebrow">Get in touch</p>
+    <h2>Let's talk about leading in dairy</h2>
+    <p style="margin:.8rem 0 0;color:#CBD9E6">
+      Reach me on LinkedIn. My direct contact details are in the CV that accompanies my
+      application.
+    </p>
+    <ul class="contact-links">
+      <li><a href="https://www.linkedin.com/in/raphael-gaisberger-079806241" rel="noopener">LinkedIn — Raphael Gaisberger</a></li>
+    </ul>
+    <img class="sig" src="../assets/img/signature-light.png" alt="Signature of Raphael Gaisberger"
+         width="1014" height="358" loading="lazy" decoding="async">
+    <p class="fine">
+      Raphael Gaisberger · available from September 2027 · open to relocate for any of the
+      programme's rotations.
+    </p>
+    <p class="fine">
+      Logos belong to the institutions and companies named beside them and appear here only
+      to identify where I studied and worked. Photographs:
+      <a href="https://unsplash.com/license" rel="noopener">Unsplash</a> — Daiga Ellaby,
+      Helena Lopes, Micheile Henderson, Carlos Muza, Kyle Glenn; and
+      <a href="https://pixabay.com/service/license-summary/" rel="noopener">Pixabay</a> —
+      dyhuettner, Mariya_M, sakibmia24, roketpik, geralt. Milk tanker by Lav Ulv,
+      <a href="https://creativecommons.org/licenses/by/2.0/" rel="noopener">CC BY 2.0</a>. Flags by
+      <a href="https://github.com/lipis/flag-icons" rel="noopener">flag-icons</a> (MIT),
+      map by <a href="https://github.com/themustafaomar/jsvectormap" rel="noopener">jsVectorMap</a> (MIT).
+    </p>
+  </div>
+</footer>
+
+<script src="../assets/vendor/jsvectormap.min.js"></script>
+<script src="../assets/vendor/world-merc.js"></script>
+<script>
+/* Kopfleiste erst nach dem ersten Bildschirm einfahren lassen. */
+(function () {
+  var bar = document.getElementById('topbar');
+  if (!bar) return;
+  var shown = false;
+  function sync() {
+    var want = window.scrollY > 560;
+    if (want !== shown) { shown = want; bar.classList.toggle('on', want); }
+  }
+  addEventListener('scroll', sync, { passive: true });
+  sync();
+})();
+
+(function () {
+  var STORY = {
+    DK:{n:"Denmark",t:"Arla Foods in Aarhus, twice: an internship in Global Trading and Planning Finance in 2025, and since 2026 the post-merger integration. Before that, a season on an Arla member farm. I live here, in Lyngby, and study at DTU."},
+    DE:{n:"Germany",t:"B.Eng. Agribusiness at Weihenstephan-Triesdorf, the first year of my master's at TU Munich, and since 2024 the costing and profitability platform at a dairy and food consultancy near Munich."},
+    IE:{n:"Ireland",t:"An Erasmus year at University College Dublin, in a country where dairy is run on grass and the cooperative model is as present as at home."},
+    CH:{n:"Switzerland",t:"Artisan alpine cheese from raw milk at Moor-Dürrenwald, from curd handling through to ripening, and the full daily cycle of on-farm processing."},
+    AT:{n:"Austria",t:"Home. Grew up on a dairy farm, Matura and agriculture diploma at HBLA Ursprung in Salzburg, military service, and the rural youth association whose board I served on."},
+    ES:{n:"Spain",t:"Work and travel in 2022, which is also where my Spanish comes from."},
+    PT:{n:"Portugal",t:"Work and travel in 2022, the second half of the same journey."}
+  };
+  var CODES = Object.keys(STORY);
+  var spot = document.getElementById('spotlight');
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.cty button'));
+
+  function show(code){
+    var s = STORY[code]; if(!s) return;
+    spot.innerHTML = '<strong>' + s.n + '</strong>' + s.t;
+    buttons.forEach(function(b){ b.setAttribute('aria-current', b.dataset.c === code ? 'true' : 'false'); });
+  }
+  show('DK');
+  buttons.forEach(function(b){
+    b.addEventListener('click', function(){ show(b.dataset.c); });
+    b.addEventListener('mouseenter', function(){ show(b.dataset.c); });
+  });
+
+  if (typeof jsVectorMap === 'undefined') return;
+  var css = getComputedStyle(document.documentElement);
+  var v = function(n){ return css.getPropertyValue(n).trim(); };
+
+  // focusOn und selectedRegions sind Konstruktor-Optionen dieser Version;
+  // nachtraegliche Aufrufe greifen nicht zuverlaessig.
+  var map = new jsVectorMap({
+    selector:'#map', map:'world_merc',
+    zoomButtons:true, zoomOnScroll:false, backgroundColor:'transparent',
+    regionsSelectable:false,
+    selectedRegions:CODES,
+    focusOn:{ regions:CODES, animate:false },
+    regionStyle:{
+      initial:{ fill:v('--surface-2'), stroke:v('--rule-2'), strokeWidth:.5 },
+      hover:{ fill:v('--accent-2'), fillOpacity:1 },
+      selected:{ fill:v('--accent') }
+    },
+    onRegionTooltipShow:function(event, tooltip, code){
+      if (STORY[code]) { tooltip.text(STORY[code].n, true); }
+      else { event.preventDefault(); }
+    },
+    onRegionClick:function(event, code){ if (STORY[code]) show(code); }
+  });
+
+  window.addEventListener('resize', function(){
+    map.updateSize && map.updateSize();
+    map.setFocus && map.setFocus({ regions: CODES, animate: false });
+  });
+})();
+</script>
+</body>
+</html>
